@@ -1,11 +1,7 @@
 REBOOTEXBIN = Rebootex_bin
 REBOOTEX = Rebootex
-INSTALLER = Installer
 VSHCONTROL = Vshctrl
 SYSTEMCONTROL = SystemControl
-SYSTEMCONTROLPXE = PXE/SystemControlPXE
-REBOOTEXPXE = PXE/RebootexPXE
-LAUNCHER = PXE/Launcher
 GALAXYDRIVER = ISODrivers/Galaxy
 M33DRIVER = ISODrivers/March33
 INFERNO = ISODrivers/Inferno
@@ -15,10 +11,6 @@ FASTRECOVERY = FastRecovery
 SATELITE = Satelite
 POPCORN = Popcorn
 RECOVERY = Recovery
-PERMANENT = Permanent
-CIPL = CIPL
-CIPL_INSTALLER = CIPL_installer
-USBDEVICE=usbdevice
 CROSSFW = CrossFW
 DISTRIBUTE = dist
 OPT_FLAGS=-j4
@@ -98,48 +90,6 @@ endif
 	@cd $(SATELITE); make $(OPT_FLAGS) $(DEBUG_OPTION)
 	@cd $(POPCORN); make $(OPT_FLAGS) $(DEBUG_OPTION)
 
-# Creating PXE Executable
-	@cd $(INSTALLER); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(SYSTEMCONTROLPXE); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(REBOOTEXPXE); make $(OPT_FLAGS)
-	@mv $(REBOOTEXPXE)/rebootex.h $(LAUNCHER)
-	@cd $(LAUNCHER); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@mv $(LAUNCHER)/EBOOT.PBP $(DISTRIBUTE)/PSP/GAME/PROUPDATE
-
-# Creating Debugging Suite for Live-System
-	@cd $(FASTRECOVERY); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@mv $(FASTRECOVERY)/EBOOT.PBP $(DISTRIBUTE)/PSP/GAME/FastRecovery
-ifeq ($(CONFIG_620), 1)
-	@cd $(PERMANENT); make $(DEBUG_OPTION)
-	@mv $(PERMANENT)/EBOOT.PBP $(DISTRIBUTE)/PSP/GAME/620PRO_Permanent
-	@mv $(PERMANENT)/hen.prx $(DISTRIBUTE)/PSP/GAME/620PRO_Permanent
-	@mv $(PERMANENT)/kmod.prx $(DISTRIBUTE)/PSP/GAME/620PRO_Permanent
-endif
-ifeq ($(CONFIG_639), 1)
-	@cd $(CIPL); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER)/kpspident; make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cp $(CIPL_INSTALLER)/ipl_update.prx $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher
-	@cp $(CIPL_INSTALLER)/EBOOT.PBP $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher
-	@cp $(CIPL_INSTALLER)/kpspident/kpspident.prx $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher
-endif
-ifeq ($(CONFIG_660), 1)
-	@cd $(CIPL); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER)/kpspident; make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cp $(CIPL_INSTALLER)/ipl_update.prx $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher
-	@cp $(CIPL_INSTALLER)/EBOOT.PBP $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher
-	@cp $(CIPL_INSTALLER)/kpspident/kpspident.prx $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher
-endif
-ifeq ($(CONFIG_661), 1)
-	@cd $(CIPL); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER); make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER)/kpspident; make $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cp $(CIPL_INSTALLER)/ipl_update.prx $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher
-	@cp $(CIPL_INSTALLER)/EBOOT.PBP $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher
-	@cp $(CIPL_INSTALLER)/kpspident/kpspident.prx $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher
-endif
-
 clean:
 	@cd $(REBOOTEXBIN); make clean $(DEBUG_OPTION)
 	@cd $(CROSSFW); make clean $(DEBUG_OPTION)
@@ -151,25 +101,6 @@ clean:
 	@cd $(GALAXYDRIVER); make clean $(DEBUG_OPTION)
 	@cd $(INFERNO); make clean $(DEBUG_OPTION)
 	@cd $(STARGATE); make clean $(DEBUG_OPTION) $(RELEASE_OPTION)
-	@cd $(FASTRECOVERY); make clean $(DEBUG_OPTION)
-ifeq ($(CONFIG_620), 1)
-	@cd $(PERMANENT); make clean $(DEBUG_OPTION)
-endif
-ifeq ($(CONFIG_639), 1)
-	@cd $(CIPL); make clean $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER); make clean $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER)/kpspident; make clean $(OPT_FLAGS) $(DEBUG_OPTION)
-endif
-ifeq ($(CONFIG_660), 1)
-	@cd $(CIPL); make clean $(OPT_FLAGS) $(DEBUG_OPTION) 
-	@cd $(CIPL_INSTALLER); make clean $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER)/kpspident; make clean $(OPT_FLAGS) $(DEBUG_OPTION)
-endif
-ifeq ($(CONFIG_661), 1)
-	@cd $(CIPL); make clean $(OPT_FLAGS) $(DEBUG_OPTION) 
-	@cd $(CIPL_INSTALLER); make clean $(OPT_FLAGS) $(DEBUG_OPTION)
-	@cd $(CIPL_INSTALLER)/kpspident; make clean $(OPT_FLAGS) $(DEBUG_OPTION)
-endif
 	@cd $(SATELITE); make clean $(DEBUG_OPTION)
 	@cd $(LAUNCHER); make clean $(DEBUG_OPTION)
 	@cd $(REBOOTEXPXE); make clean $(DEBUG_OPTION)
