@@ -56,18 +56,6 @@ all:
 	@mkdir $(DISTRIBUTE)/PSP/GAME || true
 	@mkdir $(DISTRIBUTE)/PSP/GAME/PROUPDATE || true
 	@mkdir $(DISTRIBUTE)/PSP/GAME/FastRecovery || true
-ifeq ($(CONFIG_620), 1)
-	@mkdir $(DISTRIBUTE)/PSP/GAME/620PRO_Permanent || true
-endif
-ifeq ($(CONFIG_639), 1)
-	@mkdir $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher || true
-endif
-ifeq ($(CONFIG_660), 1)
-	@mkdir $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher || true
-endif
-ifeq ($(CONFIG_661), 1)
-	@mkdir $(DISTRIBUTE)/PSP/GAME/CIPL_Flasher || true
-endif
 	@rm -f ./Common/*.o
 
 # Creating CrossFW library
@@ -75,13 +63,11 @@ endif
 
 # Creating Live-System Reboot Buffer
 	@cd $(REBOOTEXBIN); make $(OPT_FLAGS)
-	@cd $(REBOOTEX); make $(OPT_FLAGS) $(DEBUG_OPTION)
 
 # Creating Live-System Components
 	@cd $(RECOVERY); make $(OPT_FLAGS) $(DEBUG_OPTION)
 	@rm -f ./Common/*.o
 	@cd $(VSHCONTROL); make $(OPT_FLAGS) $(DEBUG_OPTION) $(NIGHTLY_OPTION)
-	@cd $(USBDEVICE); make $(OPT_FLAGS) $(DEBUG_OPTION) $(NIGHTLY_OPTION)
 	@cd $(SYSTEMCONTROL); make $(OPT_FLAGS) $(DEBUG_OPTION)
 	@cd $(GALAXYDRIVER); make $(OPT_FLAGS) $(DEBUG_OPTION)
 	@cd $(INFERNO); make $(OPT_FLAGS) $(DEBUG_OPTION)
@@ -93,17 +79,12 @@ clean:
 	@rm -rf $(DISTRIBUTE)
 	@cd $(REBOOTEXBIN); make clean $(DEBUG_OPTION)
 	@cd $(CROSSFW); make clean $(DEBUG_OPTION)
-	@cd $(INSTALLER); make clean $(DEBUG_OPTION)
 	@cd $(VSHCONTROL); make clean $(DEBUG_OPTION)
-	@cd $(USBDEVICE); make clean $(DEBUG_OPTION)
 	@cd $(SYSTEMCONTROL); make clean $(DEBUG_OPTION)
 	@cd $(GALAXYDRIVER); make clean $(DEBUG_OPTION)
 	@cd $(INFERNO); make clean $(DEBUG_OPTION)
 	@cd $(STARGATE); make clean $(DEBUG_OPTION) $(RELEASE_OPTION)
 	@cd $(SATELITE); make clean $(DEBUG_OPTION)
-	@cd $(LAUNCHER); make clean $(DEBUG_OPTION)
-	@cd $(REBOOTEXPXE); make clean $(DEBUG_OPTION)
-	@cd $(SYSTEMCONTROLPXE); make clean $(DEBUG_OPTION)
 	@cd $(POPCORN); make clean $(DEBUG_OPTION)
 	@cd $(RECOVERY); make clean $(DEBUG_OPTION)
 
