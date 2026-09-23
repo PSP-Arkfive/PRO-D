@@ -1,5 +1,4 @@
 REBOOTEXBIN = Rebootex_bin
-REBOOTEX = Rebootex
 VSHCONTROL = Vshctrl
 SYSTEMCONTROL = SystemControl
 GALAXYDRIVER = ISODrivers/Galaxy
@@ -91,9 +90,9 @@ endif
 	@cd $(POPCORN); make $(OPT_FLAGS) $(DEBUG_OPTION)
 
 clean:
+	@rm -rf $(DISTRIBUTE)
 	@cd $(REBOOTEXBIN); make clean $(DEBUG_OPTION)
 	@cd $(CROSSFW); make clean $(DEBUG_OPTION)
-	@cd $(REBOOTEX); make clean $(DEBUG_OPTION)
 	@cd $(INSTALLER); make clean $(DEBUG_OPTION)
 	@cd $(VSHCONTROL); make clean $(DEBUG_OPTION)
 	@cd $(USBDEVICE); make clean $(DEBUG_OPTION)
@@ -107,7 +106,6 @@ clean:
 	@cd $(SYSTEMCONTROLPXE); make clean $(DEBUG_OPTION)
 	@cd $(POPCORN); make clean $(DEBUG_OPTION)
 	@cd $(RECOVERY); make clean $(DEBUG_OPTION)
-	@rm -rf $(DISTRIBUTE)
 
 deps:
 	make clean_lib

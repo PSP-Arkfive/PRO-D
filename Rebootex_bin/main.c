@@ -20,7 +20,6 @@
 #include "utils.h"
 #include "config.h"
 #include "rebootex_bin_patch_offset.h"
-#include "../Permanent/ppatch_config.h"
 
 typedef struct _btcnf_header
 {
@@ -107,11 +106,12 @@ void (* reboot)(int arg1, int arg2, int arg3, int arg4) = (void *)REBOOT_START;
 
 void load_configure(void);
 
+int SearchPrx(char *buffer, const char *modname);
 int RenameModule(void *buffer, char *mod_name, char *new_mod_name);
 int AddPRX(char * buffer, char * insertbefore, char * prxname, u32 flags);
 int AddPRXNoCopyName(char * buffer, char * insertbefore, int prxname_offset, u32 flags);
-void RemovePrx(char *buffer, const char *prxname, u32 flags);
-void ModifyPrxFlag(char *buffer, const char* modname, u32 flags);
+int RemovePrx(char *buffer, const char *prxname, u32 flags);
+int ModifyPrxFlag(char *buffer, const char* modname, u32 flags);
 int MovePrx(char * buffer, char * insertbefore, const char * prxname, u32 flags);
 int GetPrxFlag(char *buffer, const char* modname, u32 *flag);
 
@@ -254,7 +254,7 @@ int _strcmp(char * str1, char * str2)
 	return result;
 }
 
-void _memmove(char * to, char * from, unsigned int length)
+int _memmove(char * to, char * from, unsigned int length)
 {
 	//result
 	int result = 0;
@@ -671,11 +671,6 @@ int is_file_existed(const char *path)
 	return 0;
 }
 
-int is_permanent_mode(void)
-{
-	return is_file_existed(VSHORIG + sizeof("flash0:") - 1);
-}
-
 int is_fatms371(void)
 {
 	return is_file_existed(PATH_FATMS_HELPER + sizeof("flash0:") - 1) && is_file_existed(PATH_FATMS_371 + sizeof("flash0:") - 1);
@@ -762,9 +757,6 @@ int _UnpackBootConfig(char **p_buffer, int length)
 	}
 
 exit:
-	if((!recovery_mode || ofw_mode) && is_permanent_mode()) {
-		RenameModule(buffer, VSHMAIN + sizeof(PATH_FLASH0) - 2, VSHORIG + sizeof(PATH_FLASH0) - 2);
-	}
 
 	return result;
 }
@@ -824,7 +816,7 @@ int AddPRXNoCopyName(char * buffer, char * insertbefore, int prxname_offset, u32
 	_btcnf_module * module = (_btcnf_module *)(buffer + header->modulestart);
 
 	//add custom module
-	_btcnf_module newmod; _memset(&newmod, 0, sizeof(newmod));
+	_btcnf_module newmod; _memset((void*)&newmod, 0, sizeof(newmod));
 
 	newmod.module_path = prxname_offset - header->modnamestart;
 
@@ -834,8 +826,8 @@ int AddPRXNoCopyName(char * buffer, char * insertbefore, int prxname_offset, u32
 		newmod.flags = 0x80010000 | (flags & 0x0000FFFF);
 	}
 
-	_memmove(&module[modnum + 1], &module[modnum + 0], buffer + header->modnameend - (unsigned int)&module[modnum + 0]);
-	_memcpy(&module[modnum + 0], &newmod, sizeof(newmod));
+	_memmove((void*)&module[modnum + 1], (void*)&module[modnum + 0], (u32)buffer + header->modnameend - (unsigned int)&module[modnum + 0]);
+	_memcpy((void*)&module[modnum + 0], (void*)&newmod, sizeof(newmod));
 	header->nmodules++;
 	header->modnamestart += sizeof(newmod);
 	header->modnameend += sizeof(newmod);
@@ -876,7 +868,7 @@ int AddPRX(char * buffer, char * insertbefore, char * prxname, u32 flags)
 	return AddPRXNoCopyName(buffer, insertbefore, header->modnameend - _strlen(prxname) - 1, flags);
 }
 
-void RemovePrx(char *buffer, const char *prxname, u32 flags)
+int RemovePrx(char *buffer, const char *prxname, u32 flags)
 {
 	u32 old_flags;
 	int ret;
@@ -895,6 +887,7 @@ void RemovePrx(char *buffer, const char *prxname, u32 flags)
 	}
 
 	ModifyPrxFlag(buffer, prxname, 0x80010000 | (old_flags & 0x0000FFFF));
+	return 0;
 }
 
 int MovePrx(char * buffer, char * insertbefore, const char * prxname, u32 flags)
@@ -905,7 +898,7 @@ int MovePrx(char * buffer, char * insertbefore, const char * prxname, u32 flags)
 }
 
 // Note flags is 32-bits!
-void ModifyPrxFlag(char *buffer, const char* modname, u32 flags)
+int ModifyPrxFlag(char *buffer, const char* modname, u32 flags)
 {
 	int modnum;
 
@@ -921,6 +914,7 @@ void ModifyPrxFlag(char *buffer, const char* modname, u32 flags)
 	_btcnf_module * module = (_btcnf_module *)(buffer + header->modulestart);
 
 	module[modnum].flags = flags;
+	return 0;
 }
 
 // Note flags is 32-bits!

@@ -102,8 +102,6 @@ extern int sceKernelExitVSH(struct SceKernelLoadExecVSHParam *param);
 extern int sceKernelLoadExecVSHEf2(const char *file, struct SceKernelLoadExecVSHParam *param);
 extern int sceKernelLoadExecVSHMs3(const char *file, struct SceKernelLoadExecVSHParam *param);
 extern int sceKernelGetSystemStatus(void);
-extern u32 sceKernelQuerySystemCall(void *func);
-extern int sceKernelCheckExecFile(unsigned char * buffer, int * check);
 extern SceUID _sceKernelLoadModuleWithApitype2(int apitype, const char *path, int flags, SceKernelLMOption *option);
 extern int sceKernelBootFromGo_635(void);
 void* sceKernelGetBlockHeadAddr(SceUID blockid);
