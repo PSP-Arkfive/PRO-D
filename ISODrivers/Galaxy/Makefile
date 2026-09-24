@@ -8,7 +8,7 @@ TARGET = galaxy
 OBJS = main.o galaxy_patch_offset.o isocache.o imports.o
 OBJS += SystemCtrlForKernel.o
 
-CFLAGS = -Os -G0 -Wall -I. -I../../include -I../../Common
+CFLAGS = -Os -G0 -Wall -I. -I../../Common
 
 LDFLAGS = -nostartfiles -L. -L../../libs
 

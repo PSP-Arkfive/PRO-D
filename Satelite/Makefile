@@ -3,7 +3,7 @@ OBJS = main.o blit.o ui.o menu.o clock.o umdvideo_list.o vpl.o trans.o trans_en.
 
 BUILD_PRX=1
 
-INCDIR = ../include ../Common
+INCDIR = ../Common
 CFLAGS = -Os -G0 -Wall
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS = $(CFLAGS)

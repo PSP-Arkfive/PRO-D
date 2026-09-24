@@ -8,7 +8,7 @@ TARGET = vshctrl
 OBJS = main.o vshpatch.o custom_update.o xmbiso.o isoreader.o virtual_pbp.o vshmenu.o usbdevice.o dirent_track.o vshctrl_patch_offset.o disctype.o hibernation_delete.o ../Common/utils.o ../Common/libs.o ../Common/strsafe.o
 IMPORTS =
 
-INCDIR = ../Common/ ../include/
+INCDIR = ../Common/
 CFLAGS = -Os -G0 -Wall -fno-pic
 
 ifeq ($(DEBUG), 1)

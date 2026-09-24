@@ -53,10 +53,6 @@
 #include "pspcipher.h"
 #include "printk.h"
 
-#define KIRK_CMD_DECRYPT_PRIVATE 0x1
-#define KIRK_CMD_DECRYPT_IV_0 0x7
-#define KIRK_CMD_SHA1_HASH 0xB 
-#define KIRK_ECDSA_VERIFY_SIGNATURE 0x11
 
 static u8 g_pubkey_28672[40] = {
 	0x77, 0x3F, 0x4B, 0xE1, 0x4C, 0x0A, 0xB4, 0x52, 0x67, 0x2B, 0x67, 0x56, 0x82, 0x4C, 0xCF, 0x42, 
@@ -417,10 +413,10 @@ int _uprx_decrypt(user_decryptor *pBlock)
 		memcpy(buf4+0x28+sizeof(sha1buf), sig, sizeof(sig));
 
 		if (pBlock->use_polling) {
-			ret = sceUtilsBufferCopyByPollingWithRange(NULL, 0, buf4, 100, KIRK_ECDSA_VERIFY_SIGNATURE);
+			ret = sceUtilsBufferCopyByPollingWithRange(NULL, 0, buf4, 100, KIRK_CMD_ECDSA_VERIFY);
 		} else {
 			// loc_00001744
-			ret = sceUtilsBufferCopyWithRange(NULL, 0, buf4, 100, KIRK_ECDSA_VERIFY_SIGNATURE);
+			ret = sceUtilsBufferCopyWithRange(NULL, 0, buf4, 100, KIRK_CMD_ECDSA_VERIFY);
 		}
 
 		// loc_0000055C

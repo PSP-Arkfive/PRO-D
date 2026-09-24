@@ -3,7 +3,7 @@ PSP_EBOOT_TITLE=PSID dumper
 TARGET = dump_psid
 OBJS = main.o
 
-CFLAGS = -Os -G0 -Wall -I../../Common -I ../../include
+CFLAGS = -Os -G0 -Wall -I../../Common -I
 PSP_FW_VERSION=620
 
 CFLAGS += -DDEBUG=1

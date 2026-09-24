@@ -41,7 +41,7 @@ OBJS = main.o \
 	   setlongjmp.o \
 	   lz4.o
 
-INCDIR = ../Common/ ../include/
+INCDIR = ../Common/
 CFLAGS = -Os -G0 -Wall -fno-pic
 
 ifeq ($(DEBUG), 1)

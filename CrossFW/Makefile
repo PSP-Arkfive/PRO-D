@@ -13,7 +13,7 @@ IMPORTS = ../Imports/SysMemForKernel.o \
 
 OBJS += $(IMPORTS)
 
-INCDIR = ../Common/ ../include/
+INCDIR = ../Common/
 CFLAGS = -Os -G0 -Wall -fno-pic
 
 ifeq ($(CONFIG_620), 1)

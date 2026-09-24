@@ -3,7 +3,7 @@ OBJS = main.o vpl.o menu.o gui.o name.o registery.o plugins.o usb.o font.o scr_p
 
 BUILD_PRX=1
 
-CFLAGS = -Os -G0 -Wall -I ../include -I ../Common
+CFLAGS = -Os -G0 -Wall -I ../Common
 
 ifeq ($(CONFIG_620), 1)
 CFLAGS += -DCONFIG_620=1

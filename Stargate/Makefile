@@ -7,7 +7,7 @@ all:
 TARGET = stargate
 OBJS = main.o key_decrypt.o pauth.o nodrm.o hide.o utility_patch.o loadmodule_patch.o analog_patch.o stargate_patch_offset.o fix_old_fw.o chn_iso.o blacklist.o pspcipher.o ../Common/utils.o ../Common/libs.o ../Common/strsafe.o
 
-INCDIR = ../include ../Common
+INCDIR = ../Common
 CFLAGS = -Os -G0 -Wall -fno-pic
 
 ifeq ($(PSID_CHECK), 1)

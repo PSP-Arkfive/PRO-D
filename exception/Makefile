@@ -5,7 +5,7 @@ DEBUG=1
 
 OBJS += psplink_driver.o
 
-INCDIR = ../include ../Common
+INCDIR = ../Common
 CFLAGS = -Os -G0 -Wall -fno-pic
 
 ifeq ($(DEBUG), 1)

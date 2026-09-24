@@ -1,7 +1,7 @@
 TARGET = test
 OBJS = main.o
 
-CFLAGS = -Os -G0 -Wall -I. -I.. -I ../../Common -I ../../include
+CFLAGS = -Os -G0 -Wall -I. -I.. -I ../../Common -I
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -DDEBUG=1

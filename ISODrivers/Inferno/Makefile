@@ -8,7 +8,7 @@ TARGET = inferno
 OBJS = main.o iodrv_funcs.o umd.o isoread.o inferno_patch_offset.o isocache.o imports.o ../../Common/utils.o
 OBJS += SystemCtrlForKernel.o
 
-CFLAGS = -Os -G0 -Wall -I. -I.. -I ../../Common -I ../../include
+CFLAGS = -Os -G0 -Wall -I. -I.. -I ../../Common
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -DDEBUG=1
