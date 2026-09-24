@@ -248,10 +248,10 @@ static int _mesgled_decrypt(u32 *tag, u8 *key, u32 code, u8 *prx, u32 size, u32 
 
 void patch_sceMesgLed()
 {
-	SceModule2 *mod;
+	SceModule *mod;
 	u32 intr, text_addr;
 
-	mod = (SceModule2*)sceKernelFindModuleByName("sceMesgLed");
+	mod = (SceModule*)sceKernelFindModuleByName("sceMesgLed");
 
 	if (mod == NULL) {
 		return;

@@ -381,10 +381,10 @@ static void sort_nid_table(resolver_config *table, u32 size)
 
 void setup_nid_resolver(void)
 {
-	SceModule2 *modmgr, *loadcore;
+	SceModule *modmgr, *loadcore;
 
-	modmgr = (SceModule2*)sctrlKernelFindModuleByName("sceModuleManager");
-	loadcore = (SceModule2*)sctrlKernelFindModuleByName("sceLoaderCore");
+	modmgr = (SceModule*)sctrlKernelFindModuleByName("sceModuleManager");
+	loadcore = (SceModule*)sctrlKernelFindModuleByName("sceLoaderCore");
 
 	missing_LoadCoreForKernel_entries[0].fp = (loadcore->text_addr + g_offs->loadercore_patch.sceKernelIcacheClearAll);
 	sceKernelLinkLibraryEntries = (void*)(loadcore->text_addr + g_offs->loadercore_patch.sceKernelLinkLibraryEntries);
@@ -425,9 +425,9 @@ void setup_nid_resolver(void)
 
 void resolve_syscon_driver(SceModule *mod)
 {
-	SceModule2 *syscon;
+	SceModule *syscon;
 
-	syscon = (SceModule2*)mod;
+	syscon = (SceModule*)mod;
 
 	if(syscon == NULL)
 		return;

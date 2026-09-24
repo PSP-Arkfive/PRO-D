@@ -19,6 +19,7 @@
 #define POPCORN_PATCH_OFFSET_H
 
 #include "utils.h"
+#include "systemctrl.h"
 
 struct PopsMgrPatch {
 	u32 get_rif_path;

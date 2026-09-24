@@ -34,7 +34,7 @@ PSP_MODULE_INFO("kubridge_test", 0, 1, 0);
 void find_module_test(void)
 {
 	int ret;
-	SceModule2 mod;
+	SceModule mod;
 
 	ret = kuKernelFindModuleByName("SystemControl", (SceModule*)&mod);
 

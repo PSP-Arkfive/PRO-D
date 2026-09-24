@@ -28,7 +28,7 @@
 #include <pspctrl.h>
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "kubridge.h"
 #include "utils.h"
 #include "printk.h"

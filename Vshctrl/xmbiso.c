@@ -18,7 +18,7 @@
 #include "xmbiso.h"
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "isoreader.h"
 #include "printk.h"
 #include "utils.h"
@@ -112,11 +112,11 @@ static inline int is_game_dir(const char *dirname)
 		return 0;
 	}
 
-	if (0 != strnicmp(p, "/PSP/GAME", sizeof("/PSP/GAME")-1)) {
+	if (0 != strncasecmp(p, "/PSP/GAME", sizeof("/PSP/GAME")-1)) {
 		return 0;
 	}
 
-	if (0 == strnicmp(p, "/PSP/GAME/_DEL_", sizeof("/PSP/GAME/_DEL_")-1)) {
+	if (0 == strncasecmp(p, "/PSP/GAME/_DEL_", sizeof("/PSP/GAME/_DEL_")-1)) {
 		return 0;
 	}
 
@@ -441,8 +441,8 @@ int gameloadexec(char * file, struct SceKernelLoadExecVSHParam * param)
 	printk("%s: %s %s\n", __func__, file, param->key);
 	
 	//enable high memory on demand
-	SEConfig config;
-	sctrlSEGetConfig(&config);
+	SEConfigPRO config;
+	sctrlSEGetConfig((SEConfig*)&config);
 	if(config.retail_high_memory) sctrlHENSetMemory(55, 0);
 	
 	//virtual iso eboot detected

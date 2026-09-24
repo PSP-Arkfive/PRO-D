@@ -29,7 +29,7 @@ void change_clock(int dir, int a);
 
 extern int pwidth;
 extern char umd_path[72];
-extern SEConfig cnf;
+extern SEConfigPRO cnf;
 
 char freq_buf[3+3+2] = "";
 char freq2_buf[3+3+2] = "";

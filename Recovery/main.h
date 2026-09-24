@@ -191,7 +191,7 @@ struct Menu {
 extern int g_ctrl_OK;
 extern int g_ctrl_CANCEL;
 extern int g_display_flip;
-extern SEConfig g_config;
+extern SEConfigPRO g_config;
 
 extern int cur_language;
 

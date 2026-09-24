@@ -22,7 +22,7 @@
 #include <pspumd.h>
 #include "printk.h"
 #include "utils.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 
 static int has_file(char *file)
 {

@@ -38,7 +38,7 @@ void patch_update_plugin_module(SceModule *mod_)
 	int version;
 	int i;
 	u32 text_addr, text_size;
-	SceModule2 *mod = (SceModule2*)mod_;
+	SceModule *mod = (SceModule*)mod_;
 
 	text_addr = mod->text_addr;
 	text_size = mod->text_size;

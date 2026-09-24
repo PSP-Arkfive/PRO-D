@@ -519,7 +519,7 @@ u32 sctrlKernelDevkitVersion(void)
 	return fw_version;
 }
 
-SceModule* sctrlKernelFindModuleByName(char *modname)
+SceModule* sctrlKernelFindModuleByName(const char *modname)
 {
 	SceModule *mod = NULL;
 

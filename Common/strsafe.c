@@ -25,6 +25,7 @@
 #include "strsafe.h"
 
 extern size_t strnlen(const char *s, size_t len);
+extern char tolower(char);
 
 char * strncat(char *dst, const char *src, size_t n)
 {

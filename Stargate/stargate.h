@@ -18,7 +18,7 @@
 #ifndef STARGATE_H
 #define STARGATE_H
 
-extern SEConfig conf;
+extern SEConfigPRO conf;
 extern u32 psp_model;
 extern u32 psp_fw_version;
 

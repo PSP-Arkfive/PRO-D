@@ -28,8 +28,9 @@
 #include "libs.h"
 #include "systemctrl.h"
 #include "printk.h"
+#include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "../Satelite/ui.h"
 #include "main.h"
 
@@ -56,7 +57,7 @@ int vctrlVSHUpdateConfig(SEConfig *config)
 
    	k1 = pspSdkSetK1(0);
 	memcpy(&conf, config, sizeof(conf));
-	ret = sctrlSESetConfig(&conf);
+	ret = sctrlSESetConfig((SEConfig*)&conf);
 	pspSdkSetK1(k1);
 
 	return ret;
@@ -71,9 +72,9 @@ int vctrlVSHExitVSHMenu(SEConfig *config, char *videoiso, int disctype)
 	ret = vctrlVSHUpdateConfig(config);
 
 	if (conf.vshcpuspeed != 0) {
-		SetSpeed(conf.vshcpuspeed, conf.vshbusspeed);
+		sctrlHENSetSpeed(conf.vshcpuspeed, conf.vshbusspeed);
 	} else {
-		SetSpeed(222, 111);
+		sctrlHENSetSpeed(222, 111);
 	}
 
 	g_VshMenuCtrl = NULL;

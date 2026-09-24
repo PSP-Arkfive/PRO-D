@@ -57,8 +57,8 @@ SceCtrlData ctrl_pad;
 int stop_stock=0;
 int thread_id=0;
 
-SEConfig cnf;
-static SEConfig cnf_old;
+SEConfigPRO cnf;
+static SEConfigPRO cnf_old;
 
 u32 psp_fw_version;
 u32 psp_model;
@@ -209,7 +209,7 @@ static int get_umdvideo(UmdVideoList *list, char *path)
 		if(p == NULL)
 			p = dir.d_name;
 
-		if(0 == stricmp(p, ".iso") || 0 == stricmp(p, ".cso") || 0 == stricmp(p, ".zso")) {
+		if(0 == strcasecmp(p, ".iso") || 0 == strcasecmp(p, ".cso") || 0 == strcasecmp(p, ".zso")) {
 #ifdef CONFIG_639
 			if(psp_fw_version == FW_639)
 				scePaf_sprintf(fullpath, "%s/%s", path, dir.d_name);
@@ -404,7 +404,7 @@ int TSRThread(SceSize args, void *argp)
 {
 	sceKernelChangeThreadPriority(0, 8);
 	vctrlVSHRegisterVshMenu(EatKey);
-	sctrlSEGetConfig(&cnf);
+	sctrlSEGetConfig((SEConfig*)&cnf);
 
 	load_recovery_font_select();
 	select_language();
@@ -435,22 +435,22 @@ int TSRThread(SceSize args, void *argp)
 
 #ifdef CONFIG_639
 	if(psp_fw_version == FW_639)
-		scePaf_memcpy(&cnf_old, &cnf, sizeof(SEConfig));
+		scePaf_memcpy(&cnf_old, &cnf, sizeof(SEConfigPRO));
 #endif
 
 #ifdef CONFIG_635
 	if(psp_fw_version == FW_635)
-		scePaf_memcpy(&cnf_old, &cnf, sizeof(SEConfig));
+		scePaf_memcpy(&cnf_old, &cnf, sizeof(SEConfigPRO));
 #endif
 
 #ifdef CONFIG_620
 	if (psp_fw_version == FW_620)
-		scePaf_memcpy_620(&cnf_old, &cnf, sizeof(SEConfig));
+		scePaf_memcpy_620(&cnf_old, &cnf, sizeof(SEConfigPRO));
 #endif
 
 #if defined(CONFIG_660) || defined(CONFIG_661)
 	if ((psp_fw_version == FW_660) || (psp_fw_version == FW_661))
-		scePaf_memcpy_660(&cnf_old, &cnf, sizeof(SEConfig));
+		scePaf_memcpy_660(&cnf_old, &cnf, sizeof(SEConfigPRO));
 #endif
 
 	while(stop_flag == 0) {
@@ -465,8 +465,8 @@ int TSRThread(SceSize args, void *argp)
 		button_func();
 	}
 
-	if(scePaf_memcmp(&cnf_old, &cnf, sizeof(SEConfig)))
-		sctrlSESetConfig(&cnf);
+	if(scePaf_memcmp(&cnf_old, &cnf, sizeof(SEConfigPRO)))
+		sctrlSESetConfig((SEConfig*)&cnf);
 
 	if (stop_flag ==2) {
 		scePowerRequestColdReset(0);
@@ -486,7 +486,7 @@ int TSRThread(SceSize args, void *argp)
 	clear_language();
 	vpl_finish();
 
-	vctrlVSHExitVSHMenu(&cnf, NULL, 0);
+	vctrlVSHExitVSHMenu((SEConfig*)&cnf, NULL, 0);
 	release_font();
 
 	return sceKernelExitDeleteThread(0);

@@ -1,5 +1,8 @@
+PY = $(shell which python3)
+BUILDTOOLS = $(PSPDEV)/share/psp-cfw-sdk/build-tools
+
 all:
-	../contrib/pspgz.py vshctrl.prx ../contrib/SystemControl.hdr vshctrl.prx VshCtrl 0x1007
+	$(PY) $(BUILDTOOLS)/gz/pspgz.py vshctrl.prx $(BUILDTOOLS)/gz/SystemControl.hdr vshctrl.prx VshCtrl 0x1007
 
 TARGET = vshctrl
 OBJS = main.o vshpatch.o custom_update.o xmbiso.o isoreader.o virtual_pbp.o vshmenu.o usbdevice.o dirent_track.o vshctrl_patch_offset.o disctype.o hibernation_delete.o ../Common/utils.o ../Common/libs.o ../Common/strsafe.o
@@ -54,7 +57,7 @@ USE_KERNEL_LIBC=1
 USE_KERNEL_LIBS=1
 
 LIBDIR = ../libs
-LDFLAGS = -mno-crt0 -nostartfiles
+LDFLAGS = -nostartfiles
 LIBS = -lpspsystemctrl_kernel -lpspusb -lpspusbdevice_driver
 
 PSPSDK=$(shell psp-config --pspsdk-path)

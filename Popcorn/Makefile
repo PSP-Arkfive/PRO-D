@@ -1,5 +1,8 @@
+PY = $(shell which python3)
+BUILDTOOLS = $(PSPDEV)/share/psp-cfw-sdk/build-tools
+
 all:
-	../contrib/pspgz.py popcorn.prx ../contrib/SystemControl.hdr popcorn.prx PROPopcornManager 0x1007
+	$(PY) $(BUILDTOOLS)/gz/pspgz.py popcorn.prx $(BUILDTOOLS)/gz/SystemControl.hdr popcorn.prx PROPopcornManager 0x1007
 
 TARGET = popcorn
 
@@ -39,7 +42,7 @@ CFLAGS += -DCONFIG_661=1
 PSP_FW_VERSION = 661
 endif
 
-LDFLAGS = -mno-crt0 -nostartfiles -L. -L../libs
+LDFLAGS = -nostartfiles -L. -L../libs
 LIBS += -lpspmodulemgr_kernel -lpspsystemctrl_kernel -lpspkubridge
 LIBS += -lpspsemaphore
 

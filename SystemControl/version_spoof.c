@@ -133,7 +133,7 @@ out:
 void patch_module_for_version_spoof(SceModule *mod1)
 {
 	u32 text_addr;
-	SceModule2 *mod = (SceModule2*)mod1;
+	SceModule *mod = (SceModule*)mod1;
 	
 	if (mod == NULL) {
 		return;

@@ -1,5 +1,8 @@
+PY = $(shell which python3)
+BUILDTOOLS = $(PSPDEV)/share/psp-cfw-sdk/build-tools
+
 all:
-	../../contrib/pspgz.py inferno.prx ../../contrib/SystemControl.hdr inferno.prx PRO_Inferno_Driver 0x1000
+	$(PY) $(BUILDTOOLS)/gz/pspgz.py inferno.prx $(BUILDTOOLS)/gz/SystemControl.hdr inferno.prx PRO_Inferno_Driver 0x1000
 
 TARGET = inferno
 OBJS = main.o iodrv_funcs.o umd.o isoread.o inferno_patch_offset.o isocache.o imports.o ../../Common/utils.o
@@ -13,7 +16,7 @@ OBJS += ../../Common/printk.o
 else
 endif
 
-LDFLAGS = -mno-crt0 -nostartfiles -L. -L ../../libs
+LDFLAGS = -nostartfiles -L. -L ../../libs
 LIBS = -lpspsystemctrl_kernel -lpspsemaphore
 
 ifeq ($(CONFIG_620), 1)

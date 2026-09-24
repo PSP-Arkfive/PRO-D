@@ -202,8 +202,8 @@ PspIoDrv *sctrlHENFindDriver(char *drvname);
 */
 u32 sctrlHENFindFunction(char *modname, char *libname, u32 nid);
 
-typedef struct SceModule2 {
-    struct SceModule2   *next;
+typedef struct SceModule {
+    struct SceModule   *next;
     unsigned short      attribute;
     unsigned char       version[2];
     char                modname[27];
@@ -228,9 +228,9 @@ typedef struct SceModule2 {
     unsigned int        nsegment;
     unsigned int        segmentaddr[4];
     unsigned int        segmentsize[4];
-} SceModule2;
+} SceModule;
 
-typedef int (* STMOD_HANDLER)(SceModule2 *);
+typedef int (* STMOD_HANDLER)(SceModule *);
 
 /**
  * Sets a function to be called just before module_start of a module is gonna be called (useful for patching purposes)
@@ -245,14 +245,14 @@ typedef int (* STMOD_HANDLER)(SceModule2 *);
  *
  * STMOD_HANDLER previous = NULL;
  *
- * int OnModuleStart(SceModule2 *mod);
+ * int OnModuleStart(SceModule *mod);
  *
  * void somepointofmycode()
  * {
  *		previous = sctrlHENSetStartModuleHandler(OnModuleStart);
  * }
  *
- * int OnModuleStart(SceModule2 *mod)
+ * int OnModuleStart(SceModule *mod)
  * {
  *		if (strcmp(mod->modname, "vsh_module") == 0)
  *		{

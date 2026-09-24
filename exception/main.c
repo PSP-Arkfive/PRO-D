@@ -86,13 +86,13 @@ void ExceptionHandler(PspDebugRegBlock * regs)
 	PspDebugStackTrace traces[MAX_BACKTRACE_NUM];
 	char timestr[80];
 	pspTime tm;
-	SceModule2 *mod;
+	SceModule *mod;
 	const char *modname;
 	u32 mod_textaddr;
 
 	fill_vram(0x00FF0000);
 
-	mod = (SceModule2*)sceKernelFindModuleByAddress(regs->epc);
+	mod = (SceModule*)sceKernelFindModuleByAddress(regs->epc);
 
 	if(mod != NULL) {
 		modname = mod->modname;

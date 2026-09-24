@@ -25,7 +25,7 @@
 #include "galaxy.h"
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "utils.h"
 #include "printk.h"
 #include "galaxy_patch_offset.h"
@@ -164,7 +164,7 @@ int cso_open(SceUID fd)
 	if(*magic == 0x4F534943 || *magic == 0x4F53495A) { // CISO or ZISO
 		lz4_compressed = (*magic == 0x4F53495A) ? 1 : 0;
 		g_CISO_cur_idx = -1;
-		ciso_total_block = g_CISO_hdr.total_bytes / g_CISO_hdr.block_size;
+		ciso_total_block = (unsigned)g_CISO_hdr.total_bytes / (unsigned)g_CISO_hdr.block_size;
 		printk("%s: total block %d\n", __func__, (int)ciso_total_block);
 
 		if(g_ciso_dec_buf == NULL) {
@@ -516,9 +516,9 @@ int sub_00000514(int fd)
 int myKernelStartThread(SceUID thid, SceSize arglen, void *argp)
 {
 	if(g_SceNpUmdMount_thid == thid) {
-		SceModule2 *pMod;
+		SceModule *pMod;
 
-		pMod = (SceModule2*) sceKernelFindModuleByName("sceNp9660_driver");
+		pMod = (SceModule*) sceKernelFindModuleByName("sceNp9660_driver");
 		g_sceNp9660_driver_text_addr = pMod->text_addr;
 
 		// 6.30: 0x00003C34
@@ -559,9 +559,9 @@ int myKernelStartThread(SceUID thid, SceSize arglen, void *argp)
 // 0x00000340
 int module_start(SceSize args, void* argp)
 {
-	SceModule2 *pMod;
+	SceModule *pMod;
 	int fd, key_config;
-	SEConfig config;
+	SEConfigPRO config;
    
 	psp_model = sceKernelGetModel();
 	psp_fw_version = sceKernelDevkitVersion();
@@ -571,7 +571,7 @@ int module_start(SceSize args, void* argp)
 	printk("PROGalaxyController started: 0x%08X\n", (uint)psp_fw_version);
 
 	key_config = sceKernelApplicationType();
-	sctrlSEGetConfig(&config);
+	sctrlSEGetConfig((SEConfig*)&config);
 	
 	if(config.iso_cache && psp_model != PSP_1000 && key_config == PSP_INIT_KEYCONFIG_GAME) {
 		int bufsize;
@@ -591,7 +591,7 @@ int module_start(SceSize args, void* argp)
 	}
 	
 	g_iso_fn = sctrlSEGetUmdFile();
-	pMod = (SceModule2*)sceKernelFindModuleByName("sceThreadManager");
+	pMod = (SceModule*)sceKernelFindModuleByName("sceThreadManager");
 
 	if(pMod != NULL) {
 		// sceKernelCreateThread export

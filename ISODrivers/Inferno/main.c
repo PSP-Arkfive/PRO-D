@@ -31,7 +31,7 @@
 #include "utils.h"
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "inferno.h"
 
 PSP_MODULE_INFO("PRO_Inferno_Driver", 0x1000, 1, 1);
@@ -96,7 +96,7 @@ int init_inferno(void)
 int module_start(SceSize args, void* argp)
 {
 	int ret, key_config;
-	SEConfig config;
+	SEConfigPRO config;
 
 	psp_model = sceKernelGetModel();
 	psp_fw_version = sceKernelDevkitVersion();
@@ -105,7 +105,7 @@ int module_start(SceSize args, void* argp)
 	printk("Inferno started FW=0x%08X %02dg\n", (uint)psp_fw_version, (int)psp_model+1);
 
 	key_config = sceKernelApplicationType();
-	sctrlSEGetConfig(&config);
+	sctrlSEGetConfig((SEConfig*)&config);
 
 	if(config.iso_cache && psp_model != PSP_1000 && key_config == PSP_INIT_KEYCONFIG_GAME) {
 		int bufsize;

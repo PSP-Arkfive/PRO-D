@@ -40,7 +40,7 @@ endif
 
 PRX_EXPORTS = exports.exp
 
-LIBS = -lpspsystemctrl_user -lpspkubridge
+LIBS = -lansic -lpspsystemctrl_user -lpspkubridge
 LIBDIR = . ../libs
 LDFLAGS =
 

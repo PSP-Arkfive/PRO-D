@@ -33,10 +33,10 @@ static void wait_memory_stick_ready_timeout(int wait);
 
 static void patch_devicename(SceUID modid)
 {
-	SceModule2 *mod;
+	SceModule *mod;
 	int i;
 
-	mod = (SceModule2*)sctrlKernelFindModuleByUID(modid);
+	mod = (SceModule*)sctrlKernelFindModuleByUID(modid);
 
 	if(mod == NULL) {
 		return;
@@ -92,7 +92,7 @@ int load_start_module(char *path)
 		return modid;
 	}
 
-	if(conf.oldplugin && psp_model == PSP_GO && 0 == strnicmp(path, "ef", 2)) {
+	if(conf.oldplugin && psp_model == PSP_GO && 0 == strncasecmp(path, "ef", 2)) {
 		patch_devicename(modid);
 	}
 

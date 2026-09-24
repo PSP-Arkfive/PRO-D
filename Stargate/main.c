@@ -33,7 +33,7 @@
 #include <stdarg.h>
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "kubridge.h"
 #include "utils.h"
 #include "printk.h"
@@ -50,7 +50,7 @@ PSP_MODULE_INFO("stargate", 0x1007, 1, 0);
 PSP_MAIN_THREAD_ATTR(0);
 
 static STMOD_HANDLER previous;
-SEConfig conf;
+SEConfigPRO conf;
 u32 psp_model;
 u32 psp_fw_version;
 
@@ -86,9 +86,9 @@ static void fix_weak_imports(void)
 	}
 
 	for(i=0; i<count; ++i) {
-		SceModule2 *pMod;
+		SceModule *pMod;
 
-		pMod = (SceModule2*)sceKernelFindModuleByUID(modids[i]);
+		pMod = (SceModule*)sceKernelFindModuleByUID(modids[i]);
 
 		if (pMod != NULL && (pMod->attribute & 0x1000) == 0) {
 			patch_drm_imports((SceModule*)pMod);
@@ -100,7 +100,7 @@ exit:
 	pspSdkSetK1(k1);
 }
 
-static int stargate_module_chain(SceModule2 *mod)
+static int stargate_module_chain(SceModule *mod)
 {
 	if (previous)
 		(*previous)(mod);
@@ -230,7 +230,7 @@ int module_start(SceSize args, void *argp)
 	setup_patch_offset_table(psp_fw_version);
 	printk_init("ms0:/log_stargate.txt");
 	printk("stargate started\n");
-	sctrlSEGetConfig(&conf);
+	sctrlSEGetConfig((SEConfig*)&conf);
 	patch_sceMesgLed();
 	patch_sceLoadExec();
 

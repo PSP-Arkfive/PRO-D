@@ -63,10 +63,10 @@ int initUserTraceMemory(void)
 void dumpJAL(u32 target, u32 ra, u32 result)
 {
 	//get caller module
-	SceModule2 * caller = (SceModule2 *)sceKernelFindModuleByAddress(ra);
+	SceModule * caller = (SceModule *)sceKernelFindModuleByAddress(ra);
 
 	//get callee module
-	SceModule2 * callee = (SceModule2 *)sceKernelFindModuleByAddress(target);
+	SceModule * callee = (SceModule *)sceKernelFindModuleByAddress(target);
 
 	//caller data
 	const char * caller_name = "UNK";
@@ -212,7 +212,7 @@ void installMemoryJALTrace(u32 start, u32 size)
 }
 
 //module trace install
-void installModuleJALTrace(SceModule2 * module)
+void installModuleJALTrace(SceModule * module)
 {
 	//valid argument
 	if(module && (KERNEL_OKAY(module->text_addr) || USER_OKAY(module->text_addr)))

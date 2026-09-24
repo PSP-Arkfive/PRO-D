@@ -21,7 +21,7 @@
 #include <pspsysmem_kernel.h>
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 
 extern u32 psp_model;
 extern u32 psp_fw_version;
@@ -94,7 +94,7 @@ void patch_sceChkreg(void);
 
 void patch_sceUSB_Stor_Ms_Driver(SceModule* mod);
 
-extern SEConfig conf;
+extern SEConfigPRO conf;
 
 #include "../CrossFW/cross_fw.h"
 

@@ -32,7 +32,7 @@ static char *modname_blacklist[] = {
 
 void module_blacklist(SceModule* mod_)
 {
-	SceModule2 *mod = (SceModule2*) mod_;
+	SceModule *mod = (SceModule*) mod_;
 	size_t i;
 
 	for(i=0; i<NELEMS(modname_blacklist); ++i) {

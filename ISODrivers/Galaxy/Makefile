@@ -1,5 +1,8 @@
+PY = $(shell which python3)
+BUILDTOOLS = $(PSPDEV)/share/psp-cfw-sdk/build-tools
+
 all:
-	../../contrib/pspgz.py galaxy.prx ../../contrib/SystemControl.hdr galaxy.prx PROGalaxyController 0x1006
+	$(PY) $(BUILDTOOLS)/gz/pspgz.py galaxy.prx $(BUILDTOOLS)/gz/SystemControl.hdr galaxy.prx PROGalaxyController 0x1006
 
 TARGET = galaxy
 OBJS = main.o galaxy_patch_offset.o isocache.o imports.o
@@ -7,7 +10,7 @@ OBJS += SystemCtrlForKernel.o
 
 CFLAGS = -Os -G0 -Wall -I. -I../../include -I../../Common
 
-LDFLAGS = -mno-crt0 -nostartfiles -L. -L../../libs
+LDFLAGS = -nostartfiles -L. -L../../libs
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -DDEBUG=1

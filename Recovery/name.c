@@ -28,6 +28,7 @@
 
 #include "systemctrl.h"
 #include "systemctrl_se.h"
+#include "systemctrl_pro.h"
 #include "vshctrl.h"
 #include "utils.h"
 #include "vpl.h"
@@ -59,9 +60,9 @@ const char* get_fake_region_name(int fakeregion)
 			return g_messages[EUROPE];
 		case FAKE_REGION_KOREA:
 			return g_messages[KOREA];
-		case FAKE_REGION_UNK:
+		case FAKE_REGION_UNITED_KINGDOM:
 			return g_messages[UNITED_KINGDOM];
-		case FAKE_REGION_UNK2:
+		case FAKE_REGION_LATIN_AMERICA:
 			return g_messages[MEXIQUE];
 		case FAKE_REGION_AUSTRALIA:
 			return g_messages[AUSTRALIA];

@@ -35,7 +35,7 @@ ASFLAGS = $(CFLAGS)
 
 PRX_EXPORTS = exports.exp
 
-LIBS = -lpspsystemctrl_user -lpspkubridge -lpsppower -lpspreg -lpspusb -lpspusbstor -lpspusbdevice
+LIBS = -lansic -lpspmalloc -lpspsystemctrl_user -lpspkubridge -lpsppower -lpspreg -lpspusb -lpspusbstor -lpspusbdevice
 LIBDIR = . ../libs
 LDFLAGS =
 

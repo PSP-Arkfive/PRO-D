@@ -29,6 +29,7 @@
 #include "kubridge.h"
 #include "systemctrl.h"
 #include "systemctrl_se.h"
+#include "systemctrl_pro.h"
 #include "vshctrl.h"
 #include "utils.h"
 #include "vpl.h"
@@ -664,7 +665,7 @@ static int advanced_menu(struct MenuEntry *entry)
 
 	menu->cur_sel = 0;
 	menu_loop(menu);
-	sctrlSESetConfig(&g_config);
+	sctrlSESetConfig((SEConfig*)&g_config);
 
 	return 0;
 }
@@ -762,7 +763,7 @@ static int configuration_menu(struct MenuEntry *entry)
 	menu_loop(menu);
 
 	save_recovery_font_select();
-	sctrlSESetConfig(&g_config);
+	sctrlSESetConfig((SEConfig*)&g_config);
 
 	return 0;
 }
@@ -867,7 +868,7 @@ static int cpu_speed_menu(struct MenuEntry *entry)
 	menu->cur_sel = 0;
 	menu_loop(menu);
 
-	sctrlSESetConfig(&g_config);
+	sctrlSESetConfig((SEConfig*)&g_config);
 
 	return 0;
 }

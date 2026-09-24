@@ -25,11 +25,11 @@
 
 extern int _sceKernelStartModule(SceUID modid, SceSize argsize, void *argp, int *status, SceKernelSMOption *option);
 
-static int (*start_module)(u32 unk0, SceModule2 *mod, u32 unk2, u32 unk3, u32 unk4) = NULL;
+static int (*start_module)(u32 unk0, SceModule *mod, u32 unk2, u32 unk3, u32 unk4) = NULL;
 
 void validate_stub(SceModule *pMod1)
 {
-	SceModule2 *pMod = (SceModule2*)pMod1;
+	SceModule *pMod = (SceModule*)pMod1;
 	u32 k1;
 	u32 i, j;
 	u32 *cur_nid, *cur_call;
@@ -80,7 +80,7 @@ void validate_stub_by_uid(int modid)
 	pspSdkSetK1(k1);
 }
 
-static int _start_module(u32 unk0, SceModule2 *mod, u32 unk2, u32 unk3, u32 unk4)
+static int _start_module(u32 unk0, SceModule *mod, u32 unk2, u32 unk3, u32 unk4)
 {
 	int ret;
 
@@ -95,7 +95,7 @@ static int _start_module(u32 unk0, SceModule2 *mod, u32 unk2, u32 unk3, u32 unk4
 
 void setup_validate_stub(SceModule *mod)
 {
-	SceModule2 *modulemgr = (SceModule2*)mod;
+	SceModule *modulemgr = (SceModule*)mod;
 
 	start_module = (void*)(modulemgr->text_addr + g_offs->modulemgr_patch.StartModule);
 	_sw(MAKE_CALL(_start_module), modulemgr->text_addr+g_offs->modulemgr_patch.StartModuleCall);

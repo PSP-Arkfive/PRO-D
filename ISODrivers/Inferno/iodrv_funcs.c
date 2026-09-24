@@ -32,7 +32,7 @@
 #include "utils.h"
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "inferno.h"
 
 /*

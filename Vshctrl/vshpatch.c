@@ -32,7 +32,7 @@
 #include "xmbiso.h"
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "main.h"
 #include "virtual_pbp.h"
 #include "strsafe.h"
@@ -49,22 +49,22 @@ typedef struct _HookUserFunctions {
 } HookUserFunctions;
 
 static STMOD_HANDLER previous;
-SEConfig conf;
+SEConfigPRO conf;
 
-static void patch_sysconf_plugin_module(SceModule2 *mod);
+static void patch_sysconf_plugin_module(SceModule *mod);
 static void patch_game_plugin_module(u32 text_addr);
-static void patch_vsh_module(SceModule2 * mod);
+static void patch_vsh_module(SceModule * mod);
 
 static void hook_iso_file_io(void);
 static void hook_iso_directory_io(void);
 static void patch_sceCtrlReadBufferPositive(void); 
-static void patch_Gameboot(SceModule2 *mod); 
-static void patch_hibblock(SceModule2 *mod); 
+static void patch_Gameboot(SceModule *mod); 
+static void patch_hibblock(SceModule *mod); 
 static void patch_msvideo_main_plugin_module(u32 text_addr);
 static void patch_htmlviewer_plugin_module(u32 text_addr);
 static void patch_htmlviewer_utility_module(u32 text_addr);
 
-static int vshpatch_module_chain(SceModule2 *mod)
+static int vshpatch_module_chain(SceModule *mod)
 {
 	u32 text_addr;
 
@@ -159,13 +159,13 @@ static void patch_sceCtrlReadBufferPositive(void)
 	sctrlHENPatchSyscall(g_sceCtrlReadBufferPositive, _sceCtrlReadBufferPositive);
 }
 
-static void patch_Gameboot(SceModule2 *mod)
+static void patch_Gameboot(SceModule *mod)
 {
 	_sw(MAKE_CALL(_sceDisplaySetHoldMode), mod->text_addr + g_offs->vshbridge_patch.sceDisplaySetHoldModeCall);
 	sceDisplaySetHoldMode = (void*)(mod->text_addr + g_offs->vshbridge_patch.sceDisplaySetHoldMode);
 }
 
-static void patch_hibblock(SceModule2 *mod)
+static void patch_hibblock(SceModule *mod)
 {
 	MAKE_DUMMY_FUNCTION_RETURN_0(mod->text_addr + g_offs->vshbridge_patch.HibBlockCheck);
 }
@@ -275,7 +275,7 @@ static int check_valid_version_txt(const void *buf, int size)
 	return 0;
 }
 
-static void patch_sysconf_plugin_module(SceModule2 *mod)
+static void patch_sysconf_plugin_module(SceModule *mod)
 {
 	void *p;
 	char str[30];
@@ -432,12 +432,12 @@ int umdLoadExec(char * file, struct SceKernelLoadExecVSHParam * param)
 {
 	//result
 	int ret = 0;
-	SEConfig config;
+	SEConfigPRO config;
 
 	printk("%s: %s %s\n", __func__, file, param->key);
 	printk("%s: %d %s\n", __func__, (int)sctrlSEGetBootConfFileIndex(), sctrlSEGetUmdFile());
 
-	sctrlSEGetConfig(&config);
+	sctrlSEGetConfig((SEConfig*)&config);
 
 	if(sctrlSEGetBootConfFileIndex() == MODE_VSHUMD) {
 		sctrlSESetBootConfFileIndex(config.umdmode);
@@ -454,7 +454,7 @@ int umdLoadExec(char * file, struct SceKernelLoadExecVSHParam * param)
 		file = sctrlSEGetUmdFile();
 		ret = get_device_name(devicename, sizeof(devicename), file);
 
-		if(ret == 0 && 0 == stricmp(devicename, "ef0:")) {
+		if(ret == 0 && 0 == strcasecmp(devicename, "ef0:")) {
 			apitype = 0x125;
 		} else {
 			apitype = 0x123;
@@ -490,7 +490,7 @@ int umdLoadExecUpdater(char * file, struct SceKernelLoadExecVSHParam * param)
 	return ret;
 }
 
-static void patch_vsh_module_for_pspgo_umdvideo(SceModule2 *mod)
+static void patch_vsh_module_for_pspgo_umdvideo(SceModule *mod)
 {
 	u32 text_addr = mod->text_addr, prev, i;
 
@@ -510,7 +510,7 @@ static void patch_vsh_module_for_pspgo_umdvideo(SceModule2 *mod)
 	}
 }
 
-static void patch_vsh_module(SceModule2 * mod)
+static void patch_vsh_module(SceModule * mod)
 {
 	//enable homebrew boot
 	_sw(NOP, mod->text_addr + g_offs->vsh_module_patch.checks[0]);
@@ -577,7 +577,7 @@ static void hook_iso_directory_io(void)
 
 int vshpatch_init(void)
 {
-	sctrlSEGetConfig(&conf);
+	sctrlSEGetConfig((SEConfig*)&conf);
 	previous = sctrlHENSetStartModuleHandler(&vshpatch_module_chain);
 	patch_sceUSB_Driver();
 	vpbp_init();

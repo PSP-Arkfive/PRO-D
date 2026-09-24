@@ -120,12 +120,12 @@ void kuKernelIcacheInvalidateAll(void)
 	pspSdkSetK1(k1);
 }
 
-u32 kuKernelPeekw(void *addr)
+unsigned int kuKernelPeekw(void *addr)
 {
 	return _lw((u32)addr);
 }
 
-void kuKernelPokew(void *addr, u32 value)
+void kuKernelPokew(void *addr, unsigned int value)
 {
 	_sw(value, (u32)addr);
 }
@@ -144,13 +144,13 @@ void *kuKernelMemcpy(void *dest, const void *src, size_t num)
 
 int kuKernelFindModuleByName(char *modname, SceModule *mod)
 {
-	SceModule2 *pmod;
+	SceModule *pmod;
 
 	if(modname == NULL || mod == NULL) {
 		return -1;
 	}
 
-	pmod = (SceModule2*) sctrlKernelFindModuleByName(modname);
+	pmod = (SceModule*) sctrlKernelFindModuleByName(modname);
 
 	if(pmod == NULL) {
 		return -2;

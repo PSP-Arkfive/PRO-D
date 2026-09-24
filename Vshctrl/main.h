@@ -24,7 +24,7 @@
 extern u32 psp_model;
 extern u32 psp_fw_version;
 
-extern SEConfig conf;
+extern SEConfigPRO conf;
 
 int vshpatch_init(void);
 void patch_update_plugin_module(SceModule *mod);

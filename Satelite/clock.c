@@ -21,7 +21,7 @@
 #include "common.h"
 #include "utils.h"
 
-extern SEConfig cnf;
+extern SEConfigPRO cnf;
 
 const int cpu_list[]={0, 20, 75, 100, 133, 166, 222, 266, 300, 333};
 const int bus_list[]={0, 10, 37, 50, 66, 83, 111, 133, 150, 166};

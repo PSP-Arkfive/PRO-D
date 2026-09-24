@@ -12,7 +12,7 @@
 #include "utils.h"
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 
 static u32 read_call = 0;
 static u32 read_hit = 0;

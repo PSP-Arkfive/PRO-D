@@ -25,7 +25,7 @@
 #include "systemctrl_se.h"
 #include "printk.h"
 
-SEConfig conf;
+SEConfigPRO conf;
 
 #define CONFIG_MAGIC 0x47434554
 
@@ -46,8 +46,8 @@ int GetConfig(SEConfig *config)
 	u32 k1;
    
 	k1 = pspSdkSetK1(0);
-	memset(config, 0, sizeof(*config));
-	fd = sceIoOpen("flash1:/config.se", PSP_O_RDONLY, 0644);
+	memset(config, 0, sizeof(SEConfigPRO));
+	fd = sceIoOpen("flash1:/config.pro", PSP_O_RDONLY, 0644);
 
 	if (fd < 0) {
 		pspSdkSetK1(k1);
@@ -55,14 +55,14 @@ int GetConfig(SEConfig *config)
 		return -1;
 	}
 
-	if (sceIoRead(fd, config, sizeof(*config)) != sizeof(*config)) {
+	if (sceIoRead(fd, config, sizeof(SEConfigPRO)) != sizeof(SEConfigPRO)) {
 		sceIoClose(fd);
 		pspSdkSetK1(k1);
 
 		return -2;
 	}
 
-	if(config->magic != get_conf_magic()) {
+	if(config->pro.magic != get_conf_magic()) {
 		sceIoClose(fd);
 		pspSdkSetK1(k1);
 		
@@ -81,8 +81,8 @@ int SetConfig(SEConfig *config)
 	SceUID fd;
 
 	k1 = pspSdkSetK1(0);
-	sceIoRemove("flash1:/config.se");
-	fd = sceIoOpen("flash1:/config.se", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	sceIoRemove("flash1:/config.pro");
+	fd = sceIoOpen("flash1:/config.pro", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
 
 	if (fd < 0) {
 		pspSdkSetK1(k1);
@@ -90,9 +90,9 @@ int SetConfig(SEConfig *config)
 		return -1;
 	}
 
-	config->magic = get_conf_magic();
+	config->pro.magic = get_conf_magic();
 
-	if (sceIoWrite(fd, config, sizeof(*config)) != sizeof(*config)) {
+	if (sceIoWrite(fd, config, sizeof(SEConfigPRO)) != sizeof(SEConfigPRO)) {
 		sceIoClose(fd);
 		pspSdkSetK1(k1);
 
@@ -112,7 +112,7 @@ int sctrlSESetConfigEx(SEConfig *config, int size)
 	int written;
    
 	k1 = pspSdkSetK1(0);
-	fd = sceIoOpen("flash1:/config.se", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
+	fd = sceIoOpen("flash1:/config.pro", PSP_O_WRONLY | PSP_O_CREAT | PSP_O_TRUNC, 0777);
 
 	if (fd < 0) {
 		pspSdkSetK1(k1);
@@ -120,7 +120,7 @@ int sctrlSESetConfigEx(SEConfig *config, int size)
 		return -1;
 	}
 
-	config->magic = get_conf_magic();
+	config->pro.magic = get_conf_magic();
 
 	written = sceIoWrite(fd, config, size);
 
@@ -146,7 +146,7 @@ int sctrlSEGetConfigEx(SEConfig *config, int size)
 	read = -1;
 	k1 = pspSdkSetK1(0);
 	memset(config, 0, size);
-	fd = sceIoOpen("flash1:/config.se", PSP_O_RDONLY, 0666);
+	fd = sceIoOpen("flash1:/config.pro", PSP_O_RDONLY, 0666);
 
 	if (fd > 0) {
 		read = sceIoRead(fd, config, size);
@@ -157,7 +157,7 @@ int sctrlSEGetConfigEx(SEConfig *config, int size)
 			return -2;
 		}
 
-		if(config->magic != get_conf_magic()) {
+		if(config->pro.magic != get_conf_magic()) {
 			return -3;
 		}
 		
@@ -171,15 +171,15 @@ int sctrlSEGetConfigEx(SEConfig *config, int size)
 
 int sctrlSESetConfig(SEConfig *config)
 {
-	return sctrlSESetConfigEx(config, sizeof(*config));
+	return sctrlSESetConfigEx(config, sizeof(SEConfigPRO));
 }
 
 int sctrlSEGetConfig(SEConfig *config)
 {
-	return sctrlSEGetConfigEx(config, sizeof(*config));
+	return sctrlSEGetConfigEx(config, sizeof(SEConfigPRO));
 }
 
-void load_default_conf(SEConfig *config)
+void load_default_conf(SEConfigPRO *config)
 {
 	memset(config, 0, sizeof(*config));
 	config->magic = get_conf_magic();
@@ -217,11 +217,11 @@ void load_config(void)
 {
 	int ret;
 	
-	ret = GetConfig(&conf);
+	ret = GetConfig((SEConfig*)&conf);
 
 	if (ret != 0) {
 		load_default_conf(&conf);
-		SetConfig(&conf);
+		SetConfig((SEConfig*)&conf);
 	} else {
 		printk("Loading config OK\n");
 	}

@@ -19,6 +19,7 @@
 #define SYSTEMCTRL_PATCH_OFFSET_H
 
 #include "utils.h"
+#include "systemctrl.h"
 
 struct InterruptManPatch {
 	u32 InvalidSyscallCheck1, InvalidSyscallCheck2;

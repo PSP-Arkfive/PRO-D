@@ -1,5 +1,8 @@
+PY = $(shell which python3)
+BUILDTOOLS = $(PSPDEV)/share/psp-cfw-sdk/build-tools
+
 all:
-	../contrib/pspgz.py stargate.prx ../contrib/SystemControl.hdr stargate.prx stargate 0x1007
+	$(PY) $(BUILDTOOLS)/gz/pspgz.py stargate.prx $(BUILDTOOLS)/gz/SystemControl.hdr stargate.prx stargate 0x1007
 
 TARGET = stargate
 OBJS = main.o key_decrypt.o pauth.o nodrm.o hide.o utility_patch.o loadmodule_patch.o analog_patch.o stargate_patch_offset.o fix_old_fw.o chn_iso.o blacklist.o pspcipher.o ../Common/utils.o ../Common/libs.o ../Common/strsafe.o
@@ -52,7 +55,7 @@ USE_KERNEL_LIBC=1
 USE_KERNEL_LIBS=1
 
 LIBDIR = ../libs
-LDFLAGS = -mno-crt0 -nostartfiles
+LDFLAGS = -nostartfiles
 LIBS = -lpspsemaphore -lpspsystemctrl_kernel -lpspkubridge -lpspmodulemgr_kernel
 
 PSPSDK=$(shell psp-config --pspsdk-path)

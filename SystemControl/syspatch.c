@@ -82,9 +82,9 @@ static void system_booted_action(void)
 	if (key_config == PSP_INIT_KEYCONFIG_GAME ||
 			key_config == PSP_INIT_KEYCONFIG_POPS
 	   ) {
-		SetSpeed(conf.umdisocpuspeed, conf.umdisobusspeed);
+		sctrlHENSetSpeed(conf.umdisocpuspeed, conf.umdisobusspeed);
 	} else if (conf.vshcpuspeed != 0) {
-		SetSpeed(conf.vshcpuspeed, conf.vshbusspeed);
+		sctrlHENSetSpeed(conf.vshcpuspeed, conf.vshbusspeed);
 	}
 
 	if(need_msstor_speed()) {
@@ -109,7 +109,7 @@ static int is_system_booted(void)
 	return 0;
 }
 
-static int syspatch_module_chain(SceModule2 *mod)
+static int syspatch_module_chain(SceModule *mod)
 {
 	int apitype;
 

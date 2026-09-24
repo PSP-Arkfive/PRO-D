@@ -20,6 +20,7 @@
 #include "utils.h"
 #include "config.h"
 #include "rebootex_bin_patch_offset.h"
+#include "systemctrl.h"
 
 typedef struct _btcnf_header
 {
@@ -71,7 +72,7 @@ int (* UnpackBootConfig)(char * buffer, int length) = NULL;
 
 //loadcore functions
 int (* DecryptPSP)(char * prx, unsigned int size, unsigned int * newsize) = 0;
-int (* sceKernelCheckExecFile)(unsigned char * addr, void * arg2) = NULL;
+int (* origKernelCheckExecFile)(unsigned char * addr, void * arg2) = NULL;
 
 //cache sync
 static inline int iCacheFlushAll(void);
@@ -417,7 +418,7 @@ int _sceKernelCheckExecFile(unsigned char * addr, void * arg2)
 		if(addr[pos + 212])
 		{
 			//forward to unsign function?
-			return sceKernelCheckExecFile(addr, arg2);
+			return origKernelCheckExecFile(addr, arg2);
 		}
 	}
 
@@ -434,7 +435,7 @@ int PatchLoadCore(void * arg1, void * arg2, void * arg3, int (* module_bootstart
 	_sw((((int)(_sceKernelCheckExecFile) >> 2) & 0x03FFFFFF) | 0x0C000000, (unsigned int)(module_bootstart) + g_offs->loadcore_patch.sceKernelCheckExecFileCall3);
 
 	DecryptPSP = (void *)((unsigned int)(module_bootstart) + g_offs->loadcore_patch.DecryptPSP);
-	sceKernelCheckExecFile = (void *)((unsigned int)(module_bootstart) + g_offs->loadcore_patch.sceKernelCheckExecFile);
+	origKernelCheckExecFile = (void *)((unsigned int)(module_bootstart) + g_offs->loadcore_patch.sceKernelCheckExecFile);
 
 	//flush instruction cache
 	iCacheFlushAll();

@@ -6,7 +6,7 @@
 
 u32 sctrlKernelGetModel(void);
 u32 sctrlKernelDevkitVersion(void);
-SceModule* sctrlKernelFindModuleByName(char *modname);
+SceModule* sctrlKernelFindModuleByName(const char *modname);
 int sctrlKernelSetDdrMemoryProtection(void *addr, int size, int prot);
 SceUID sctrlKernelCreateHeap(SceUID partitionid, SceSize size, int unk, const char *name);
 int sctrlKernelDeleteHeap(SceUID heapid);

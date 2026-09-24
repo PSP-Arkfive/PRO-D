@@ -31,7 +31,7 @@
 #include "utils.h"
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "inferno.h"
 #include "lz4.h"
 
@@ -187,7 +187,7 @@ static int is_ciso(SceUID fd)
 	if(*magic == 0x4F534943 || *magic == 0x4F53495A) { // CISO or ZISO
 		lz4_compressed = (*magic == 0x4F53495A) ? 1 : 0;
 		g_CISO_cur_idx = -1;
-		g_ciso_total_block = g_CISO_hdr.total_bytes / g_CISO_hdr.block_size;
+		g_ciso_total_block = (unsigned)g_CISO_hdr.total_bytes / (unsigned)g_CISO_hdr.block_size;
 		printk("%s: total block %d\n", __func__, (int)g_ciso_total_block);
 
 		if(g_ciso_dec_buf == NULL) {
@@ -498,7 +498,7 @@ static int refresh_cso_index(u32 size, u32 offset) {
 	// out of scope, read cso index table again
 	if (starting_block < g_cso_idx_start_block|| ending_block >= g_cso_idx_start_block + CISO_IDX_MAX_ENTRIES) {
 
-		u32 total_blocks = g_CISO_hdr.total_bytes / g_CISO_hdr.block_size;
+		u32 total_blocks = (unsigned)g_CISO_hdr.total_bytes / (unsigned)g_CISO_hdr.block_size;
 
 		if (starting_block > total_blocks) {
 			// the requested block goes beyond the max block number
@@ -511,7 +511,7 @@ static int refresh_cso_index(u32 size, u32 offset) {
 			idx_size = CISO_IDX_MAX_ENTRIES * 4;
 		}
 
-		int ret = read_raw_data(g_cso_idx_cache, idx_size, starting_block * 4 + 24);
+		int ret = read_raw_data((void*)g_cso_idx_cache, idx_size, starting_block * 4 + 24);
 		if(ret < 0) {
 		    return ret;
 		}

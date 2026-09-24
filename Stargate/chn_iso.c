@@ -27,7 +27,8 @@
 #include <stdarg.h>
 #include "libs.h"
 #include "systemctrl.h"
-#include "systemctrl_private.h"
+#include "systemctrl_se.h"
+#include "systemctrl_pro.h"
 #include "kubridge.h"
 #include "printk.h"
 #include "strsafe.h"
@@ -156,11 +157,11 @@ static char *g_iso_driver_module_name[] = {
 
 void patch_IsoDrivers(void)
 {
-	SceModule2 *mod;
+	SceModule *mod;
 	int i;
 
 	for(i=0; i<NELEMS(g_iso_driver_module_name); ++i) {
-		mod = (SceModule2*) sceKernelFindModuleByName(g_iso_driver_module_name[i]);
+		mod = (SceModule*) sceKernelFindModuleByName(g_iso_driver_module_name[i]);
 
 		if(mod != NULL) {
 			hook_import_bynid((SceModule*)mod, "IoFileMgrForKernel", 0x109F50BC, &myIoOpen_kernel_chn, 0);

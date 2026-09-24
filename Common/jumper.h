@@ -33,7 +33,7 @@ void dumpJAL(u32 target, u32 ra, u32 result);
 void installJALTrace(u32 address);
 
 //module trace install
-void installModuleJALTrace(SceModule2 * module);
+void installModuleJALTrace(SceModule * module);
 
 void installMemoryJALTrace(u32 start, u32 size);
 

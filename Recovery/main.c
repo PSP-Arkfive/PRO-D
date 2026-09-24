@@ -28,6 +28,7 @@
 #include "systemctrl.h"
 #include "prodebug.h"
 #include "systemctrl_se.h"
+#include "systemctrl_pro.h"
 #include "vshctrl.h"
 #include "utils.h"
 #include "vpl.h"
@@ -50,7 +51,7 @@ static u32 no_vsh = 0;
 
 int g_display_flip;
 
-SEConfig g_config;
+SEConfigPRO g_config;
 
 u32 ctrl_read(void)
 {
@@ -168,9 +169,9 @@ void recovery_exit(void)
 	exit_usb();
 
 	if(no_vsh) {
-		sctrlSESetConfig(&g_config);
+		sctrlSESetConfig((SEConfig*)&g_config);
 	} else {
-		vctrlVSHUpdateConfig(&g_config);
+		vctrlVSHUpdateConfig((SEConfig*)&g_config);
 		resume_vsh_thread();
 	}
 
@@ -205,7 +206,7 @@ static int get_fontlist(FontList *list, char *path)
 		if(p == NULL)
 			p = dir.d_name;
 
-		if(0 == stricmp(p, ".bin") || 0 == stricmp(p, ".pf")) {
+		if(0 == strcasecmp(p, ".bin") || 0 == strcasecmp(p, ".pf")) {
 			sprintf(fullpath, "%s/%s", path, dir.d_name);
 			fontlist_add(list, fullpath);
 		}
@@ -227,7 +228,7 @@ int main_thread(SceSize size, void *argp)
 		no_vsh = 1;
 	}
 
-	sctrlSEGetConfig(&g_config);
+	sctrlSEGetConfig((SEConfig*)&g_config);
 	vpl_init();
 	suspend_vsh_thread();
 	proDebugScreenInit();

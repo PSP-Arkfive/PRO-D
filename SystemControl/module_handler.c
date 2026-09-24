@@ -30,11 +30,11 @@
 #include "libs.h"
 #include "systemctrl_patch_offset.h"
 
-int (*g_on_module_start)(SceModule2*) = NULL;
+int (*g_on_module_start)(SceModule*) = NULL;
 
-static int (*_prologue_module)(void *unk0, SceModule2 *mod) = NULL;
+static int (*_prologue_module)(void *unk0, SceModule *mod) = NULL;
 
-static int prologue_module(void *unk0, SceModule2 *mod)
+static int prologue_module(void *unk0, SceModule *mod)
 {
 	int ret = (*_prologue_module)(unk0, mod);
 	
@@ -51,9 +51,9 @@ static int prologue_module(void *unk0, SceModule2 *mod)
 
 void setup_module_handler(void)
 {
-	SceModule2 *mod;
+	SceModule *mod;
 
-	mod = (SceModule2*) sctrlKernelFindModuleByName("sceModuleManager");
+	mod = (SceModule*) sctrlKernelFindModuleByName("sceModuleManager");
 
 	if (mod == NULL)
 		return;

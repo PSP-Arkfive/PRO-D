@@ -39,19 +39,19 @@ char *GetUmdFile(void)
 
 char *sctrlSEGetUmdFile(void) __attribute__((alias("GetUmdFile")));
 
-void SetUmdFile(char *file)
+void SetUmdFile(const char *file)
 {
 	STRCPY_S(g_iso_filename, file);
 }
 
-void sctrlSESetUmdFile(char *file) __attribute__((alias("SetUmdFile")));
+void sctrlSESetUmdFile(const char *file) __attribute__((alias("SetUmdFile")));
 
 void sctrlSESetBootConfFileIndex(int index)
 {
 	rebootex_conf.iso_mode = index;
 }
 
-u32 sctrlSEGetBootConfFileIndex(void)
+unsigned int sctrlSEGetBootConfFileIndex(void)
 {
 	return rebootex_conf.iso_mode;
 }

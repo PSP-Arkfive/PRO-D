@@ -146,7 +146,7 @@ static int _memlmd_decrypt(u8 *prx, u32 size, u32 *newsize, u32 use_polling)
 void patch_sceMemlmd(void)
 {
 	//find module
-	SceModule2 * memlmd = (SceModule2*) sctrlKernelFindModuleByName("sceMemlmd");
+	SceModule * memlmd = (SceModule*) sctrlKernelFindModuleByName("sceMemlmd");
 	struct MemlmdPatch *patch;
 
 	//32mb psp
@@ -195,7 +195,7 @@ static int _mesgled_decrypt(u32 *tag, u8 *key, u32 code, u8 *prx, u32 size, u32 
 
 void patch_mesgled(SceModule* mod1)
 {
-	SceModule2 *mod = (SceModule2*) mod1;
+	SceModule *mod = (SceModule*) mod1;
 	u32 text_addr, offset, i;
    
 	text_addr = mod->text_addr;

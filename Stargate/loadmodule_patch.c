@@ -23,7 +23,7 @@
 #include <string.h>
 #include "printk.h"
 #include "systemctrl.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "strsafe.h"
 #include "libs.h"
 #include "utils.h"

@@ -1,5 +1,8 @@
+PY = $(shell which python3)
+BUILDTOOLS = $(PSPDEV)/share/psp-cfw-sdk/build-tools
+
 all:
-	../contrib/pspgz.py systemctrl.prx ../contrib/SystemControl.hdr systemctrl.prx
+	$(PY) $(BUILDTOOLS)/gz/pspgz.py systemctrl.prx $(BUILDTOOLS)/gz/SystemControl.hdr systemctrl.prx SystemCtrl 0x1007
 
 TARGET = systemctrl
 OBJS = main.o \
@@ -86,7 +89,7 @@ USE_KERNEL_LIBC=1
 USE_KERNEL_LIBS=1
 
 LIBDIR = ../libs
-LDFLAGS = -mno-crt0 -nostartfiles
+LDFLAGS = -nostartfiles
 LIBS = -lpspsemaphore ../CrossFW/cross_fw.a
 
 PSPSDK=$(shell psp-config --pspsdk-path)

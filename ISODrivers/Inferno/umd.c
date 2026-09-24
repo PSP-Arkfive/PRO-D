@@ -31,7 +31,7 @@
 #include "utils.h"
 #include "systemctrl.h"
 #include "systemctrl_se.h"
-#include "systemctrl_private.h"
+#include "systemctrl_pro.h"
 #include "inferno.h"
 
 extern int sceKernelGetCompiledSdkVersion(void);
@@ -288,7 +288,7 @@ static inline void set_gp(u32 gp)
 // for now 6.20/6.35 share the same patch
 int sceUmdMan_driver_4FFAB8DA(u32 a0, u32 a1, u32 a2)
 {
-	SceModule2 *mod;
+	SceModule *mod;
 	u32 text_addr, intr;
 	int i;
 
@@ -301,7 +301,7 @@ int sceUmdMan_driver_4FFAB8DA(u32 a0, u32 a1, u32 a2)
 	g_000027A0 = a2;
 	g_00002798 = (void*)a1;
 	
-	mod = (SceModule2*)sceKernelFindModuleByName("sceIsofs_driver");
+	mod = (SceModule*)sceKernelFindModuleByName("sceIsofs_driver");
 	text_addr = mod->text_addr;
 
 	intr = 0x00001021; // move $v0, $zr

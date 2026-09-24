@@ -29,7 +29,7 @@
 
 void patch_sceInterruptManager(void)
 {
-	SceModule2 *mod = (SceModule2*) sctrlKernelFindModuleByName("sceInterruptManager");
+	SceModule *mod = (SceModule*) sctrlKernelFindModuleByName("sceInterruptManager");
 
 	// disable writing invalid address to reset vector
 	_sw(NOP, mod->text_addr + g_offs->interruptman_patch.InvalidSyscallCheck1);

@@ -38,7 +38,7 @@ struct Hooks {
 
 extern void patch_analog_imports(SceModule *mod);
 
-SEConfig conf;
+SEConfigPRO conf;
 
 enum {
 	ICON0_OK = 0,
@@ -616,11 +616,11 @@ static struct Hooks g_amctrl_hooks[] = {
 
 static void patch_scePops_Manager(void)
 {
-	SceModule2 *mod;
+	SceModule *mod;
 	u32 text_addr;
 	size_t i;
 
-	mod = (SceModule2*) sceKernelFindModuleByName("scePops_Manager");
+	mod = (SceModule*) sceKernelFindModuleByName("scePops_Manager");
 	text_addr = mod->text_addr;
 
 	for(i=0; i<NELEMS(g_io_hooks); ++i) {
@@ -735,7 +735,6 @@ exit:
 static int place_syscall_stub(void* func, void *addr)
 {
 	u32 syscall_num;
-	extern u32 sceKernelQuerySystemCall(void *func);
 
 	syscall_num = sceKernelQuerySystemCall(func);
 
@@ -842,7 +841,7 @@ int _sceMeAudio_67CD7972(void *buf, int size)
 	return ret;
 }
 
-static int popcorn_patch_chain(SceModule2 *mod)
+static int popcorn_patch_chain(SceModule *mod)
 {
 	printk("%s: %s\n", __func__, mod->modname);
 
@@ -950,7 +949,7 @@ int module_start(SceSize args, void* argp)
 	setup_patch_offset_table(psp_fw_version);
 	psp_model = sceKernelGetModel();
 	memset(&conf, 0, sizeof(conf));
-	sctrlSEGetConfig(&conf);
+	sctrlSEGetConfig((SEConfig*)&conf);
 	printk_init("ms0:/popcorn.txt");
 	printk("Popcorn: init_file = %s psp_fw_version = 0x%08X psp_model = %d\n", sceKernelInitFileName(), (uint)psp_fw_version, (int)psp_model);
 

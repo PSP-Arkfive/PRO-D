@@ -83,7 +83,7 @@ static SceUInt usb_charge_timer_handler(SceUID uid, SceInt64 unk0, SceInt64 unk1
 void usb_charge(void)
 {
 	SceUID vtimer;
-	SceModule2 *mod;
+	SceModule *mod;
 
 	if (!conf.usbcharge || psp_model == PSP_1000 ) {
 		return;
@@ -100,7 +100,7 @@ void usb_charge(void)
 	sceKernelStartVTimer(vtimer);
 	sceKernelSetVTimerHandlerWide(vtimer, 5000000, usb_charge_timer_handler, NULL);
 
-	mod = (SceModule2*)sctrlKernelFindModuleByName("sceUSB_Driver");
+	mod = (SceModule*)sctrlKernelFindModuleByName("sceUSB_Driver");
 
 	if (mod != NULL) {
 		u32 text_addr;

@@ -21,7 +21,8 @@
 #include <psputilsforkernel.h>
 #include "printk.h"
 #include "utils.h"
-#include "systemctrl_private.h"
+#include "systemctrl_se.h"
+#include "systemctrl_pro.h"
 #include "lz4.h"
 
 #define MAX_RETRIES 8

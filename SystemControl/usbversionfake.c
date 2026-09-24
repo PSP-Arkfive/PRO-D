@@ -34,6 +34,10 @@
 static char g_version_buf[5];
 static char g_cur_version_buf[5];
 
+static inline int isdigit(char c){
+	return '0' <= c <= '9';
+}
+
 static char *_strncpy(char * dst, const char * src, size_t num)
 {
 	printk("%s: %s %u\n", __func__, src, num);

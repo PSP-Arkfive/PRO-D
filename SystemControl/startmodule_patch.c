@@ -113,9 +113,9 @@ static int load_opnssmp(const char *path, u32 tag)
 static int _sceKernelStartModule(int modid, SceSize argsize, void *argp, int *modstatus, SceKernelSMOption *opt)
 {
 	int ret;
-	SceModule2 *mod, *mediasync, *kernellibrary;
+	SceModule *mod, *mediasync, *kernellibrary;
 
-	mod = (SceModule2*) sctrlKernelFindModuleByUID(modid);
+	mod = (SceModule*) sctrlKernelFindModuleByUID(modid);
 
 	if(custom_start_module != NULL) {
 		ret = custom_start_module(modid, argsize, argp, modstatus, opt);
@@ -126,7 +126,7 @@ static int _sceKernelStartModule(int modid, SceSize argsize, void *argp, int *mo
 	}
 
 	if(!plugin_loaded) {
-		mediasync = (SceModule2*)sctrlKernelFindModuleByName("sceMediaSync");
+		mediasync = (SceModule*)sctrlKernelFindModuleByName("sceMediaSync");
 
 		if(mediasync == NULL) {
 			goto out;
@@ -159,7 +159,7 @@ static int _sceKernelStartModule(int modid, SceSize argsize, void *argp, int *mo
 		u32 key = sceKernelApplicationType();
 
 		if (key == PSP_INIT_KEYCONFIG_GAME) {
-			kernellibrary = (SceModule2*)sctrlKernelFindModuleByName("sceKernelLibrary");
+			kernellibrary = (SceModule*)sctrlKernelFindModuleByName("sceKernelLibrary");
 
 			if(kernellibrary != NULL) {
 				const char *path;

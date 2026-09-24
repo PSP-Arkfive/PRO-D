@@ -70,8 +70,8 @@ all:
 	@cd $(GALAXYDRIVER); make $(OPT_FLAGS) $(DEBUG_OPTION)
 	@cd $(INFERNO); make $(OPT_FLAGS) $(DEBUG_OPTION)
 	@cd $(STARGATE); make $(OPT_FLAGS) $(DEBUG_OPTION) $(RELEASE_OPTION)
-	@cd $(SATELITE); make $(OPT_FLAGS) $(DEBUG_OPTION)
 	@cd $(POPCORN); make $(OPT_FLAGS) $(DEBUG_OPTION)
+	@cd $(SATELITE); make $(OPT_FLAGS) $(DEBUG_OPTION)
 
 clean:
 	@rm -rf $(DISTRIBUTE)

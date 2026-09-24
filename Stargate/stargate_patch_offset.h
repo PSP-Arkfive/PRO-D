@@ -19,6 +19,7 @@
 #define STARGATE_PATCH_OFFSET_H
 
 #include "utils.h"
+#include "systemctrl.h"
 
 typedef struct _PatchOffset {
 	u32 fw_version;
