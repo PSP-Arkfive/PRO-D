@@ -101,7 +101,7 @@ int	sctrlHENIsDevhook()
 
 int sctrlHENGetVersion()
 {
-	return 0x1003; // 0x1000 in TN's code :)
+	return 0x1004; // 0x1000 in TN's code :)
 }
 
 int sctrlHENGetMinorVersion()

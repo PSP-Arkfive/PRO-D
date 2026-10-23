@@ -47,13 +47,10 @@ endif
 all:
 # Preparing Distribution Folders
 	@mkdir $(DISTRIBUTE) || true
+	@mkdir $(DISTRIBUTE)/flash0/ || true
 	@mkdir $(DISTRIBUTE)/seplugins/ || true
 	@cp -r contrib/fonts $(DISTRIBUTE)/seplugins/fonts || true
 	@cp Translated/* $(DISTRIBUTE)/seplugins || true
-	@mkdir $(DISTRIBUTE)/PSP || true
-	@mkdir $(DISTRIBUTE)/PSP/GAME || true
-	@mkdir $(DISTRIBUTE)/PSP/GAME/PROUPDATE || true
-	@mkdir $(DISTRIBUTE)/PSP/GAME/FastRecovery || true
 	@rm -f ./Common/*.o
 
 # Creating CrossFW library
@@ -72,6 +69,16 @@ all:
 	@cd $(STARGATE); make $(OPT_FLAGS) $(DEBUG_OPTION) $(RELEASE_OPTION)
 	@cd $(POPCORN); make $(OPT_FLAGS) $(DEBUG_OPTION)
 	@cd $(SATELITE); make $(OPT_FLAGS) $(DEBUG_OPTION)
+
+# Copy binaries
+	@cp $(RECOVERY)/recovery.prx dist/flash0/_recovery.prx
+	@cp $(VSHCONTROL)/vshctrl.prx dist/flash0/_vshctrl.prx
+	@cp $(SYSTEMCONTROL)/systemctrl.prx dist/flash0/_systemctrl.prx
+	@cp $(GALAXYDRIVER)/galaxy.prx dist/flash0/_galaxy.prx
+	@cp $(INFERNO)/inferno.prx dist/flash0/_inferno.prx
+	@cp $(STARGATE)/stargate.prx dist/flash0/_stargate.prx
+	@cp $(POPCORN)/popcorn.prx dist/flash0/_popcorn.prx
+	@cp $(SATELITE)/satelite.prx dist/flash0/_satelite.prx
 
 clean:
 	@rm -rf $(DISTRIBUTE)
