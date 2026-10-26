@@ -1,37 +1,33 @@
-PSPSDK=$(shell psp-config --pspsdk-path)
-INCLUDES=-I $(PSPSDK)/include -I ../Common
+PSPSDK = $(shell psp-config --pspsdk-path)
+PSPDEV = $(shell psp-config --pspdev-path)
+PYTHON = $(shell which python3)
+CFWSDK = $(PSPDEV)/share/psp-cfw-sdk
 
-all: a.bin
+TARGET = reboot.bin.gz
 
-CFLAGS=$(INCLUDES) -W -Wall -Os -G0 -fno-pic -fno-toplevel-reorder -fno-builtin -mno-abicalls -w -S
+all: $(TARGET)
 
-ifeq ($(CONFIG_635), 1)
-CFLAGS+=-DCONFIG_635=1
-endif
+C_OBJS = main.o
 
-ifeq ($(CONFIG_620), 1)
-CFLAGS+=-DCONFIG_620=1
-endif
+CC = psp-gcc
+LD = psp-ld
+STRIP = psp-strip
+OBJCOPY = psp-objcopy
+LINKFILE = $(CFWSDK)/build-tools/bootloadex.l
+INCDIR = $(PSPSDK)/include
+CFLAGS = -std=c99 -Wall -Os -G0 -fno-pic $(addprefix -I, $(INCDIR))
+LIBS = -L $(PSPSDK)/lib -lbootloadex -lansic
 
-ifeq ($(CONFIG_639), 1)
-CFLAGS+=-DCONFIG_639=1
-endif
+main.elf: $(C_OBJS)
 
-ifeq ($(CONFIG_660), 1)
-CFLAGS+=-DCONFIG_660=1
-endif
-
-ifeq ($(CONFIG_661), 1)
-CFLAGS+=-DCONFIG_661=1
-endif
-
-a.bin:
-	psp-gcc $(CFLAGS) main.c -o main.s
-	psp-as main.s -o main.o
-	psp-ld -T linkfile.l main.o -o main.elf
-	psp-strip -s main.elf
-	psp-objcopy -O binary main.elf rebootex.bin
-	bin2c rebootex.bin rebootex.h rebootex
+$(TARGET): main.elf
+	$(STRIP) -s $<
+	$(OBJCOPY) -O binary $< $(patsubst %.gz,%,$(TARGET))
+	$(PYTHON) $(CFWSDK)/build-tools/gz/gz.py $(patsubst %.gz,%,$(TARGET)) $@
+	bin2c $@ rebootex.h rebootex
+	@echo GET $@
 
 clean:
-	rm -rf *~ *.s *.o *.elf rebootex.bin rebootex.h
+	rm -rf *~ *.s *.o *.elf reboot.bin reboot.bin.gz rebootex.h $(EXTRA_CLEAN)
+
+include $(CFWSDK)/build-tools/beauty_bin.mak
