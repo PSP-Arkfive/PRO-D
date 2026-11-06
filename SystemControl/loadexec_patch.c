@@ -36,6 +36,7 @@
 static int (*LoadReboot)(void * arg1, unsigned int arg2, void * arg3, unsigned int arg4) = NULL;
 rebootex_config rebootex_conf;
 u8* custom_rebootex = NULL;
+u32 size_custom_rebootex = REBOOTEX_MAX_SIZE;
 
 //load reboot wrapper
 static int load_reboot(void * arg1, unsigned int arg2, void * arg3, unsigned int arg4)
@@ -44,7 +45,7 @@ static int load_reboot(void * arg1, unsigned int arg2, void * arg3, unsigned int
 		if (custom_rebootex[0] == 0x1F && custom_rebootex[1] == 0x8B) // gzip packed rebootex
 			sceKernelGzipDecompress((unsigned char *)REBOOTEX_START, REBOOTEX_MAX_SIZE, custom_rebootex, NULL);
 		else // plain payload
-			memcpy((void *)REBOOTEX_START, custom_rebootex, REBOOTEX_MAX_SIZE);
+			memcpy((void *)REBOOTEX_START, custom_rebootex, size_custom_rebootex);
 	}
 	else {
 		//copy reboot extender

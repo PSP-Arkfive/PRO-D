@@ -254,10 +254,13 @@ int sctrlHENSetMemory(u32 p2, u32 p9)
 }
 
 extern void* custom_rebootex;
-void sctrlHENSetRebootexOverride(const u8 *rebootex)
+extern u32 size_custom_rebootex;
+void sctrlHENSetRebootexOverride(void *rebootex, u32 size)
 {
     if (rebootex != NULL) // override rebootex
-        custom_rebootex = (void*)rebootex;
+        custom_rebootex = rebootex;
+    if (size)
+		size_custom_rebootex = size;
 }
 
 int sctrlKernelSetInitApitype(int apitype)
