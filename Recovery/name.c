@@ -93,6 +93,7 @@ const char *get_iso_name(int iso_mode)
 		case MODE_NP9660:
 			return g_messages[NP9660];
 		case MODE_INFERNO:
+		case MODE_ME:
 			return g_messages[INFERNO];
 	}
 

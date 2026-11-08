@@ -281,6 +281,7 @@ int menu_setup(void)
 			item_str[TMENU_UMD_MODE] = g_messages[MSG_NP9660];
 			break;
 		case MODE_INFERNO:
+		case MODE_ME:
 			item_str[TMENU_UMD_MODE] = g_messages[MSG_INFERNO];
 			break;
 	}
