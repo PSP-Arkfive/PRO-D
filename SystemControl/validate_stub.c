@@ -35,25 +35,25 @@ void validate_stub(SceModule *pMod1)
 	u32 *cur_nid, *cur_call;
 	u32 library_flag;
 	u32 is_weak;
-	PspModuleImport *pImp;
+	SceLibraryStubTable *pImp;
 
 	k1 = pspSdkSetK1(0);
 	
 	if (pMod != NULL) {
-		for(i=0; i<pMod->stub_size; i+=(pImp->entLen * 4)) {
-			pImp = (PspModuleImport*)(pMod->stub_top+i);
+		for(i=0; i<pMod->stub_size; i+=(pImp->len * 4)) {
+			pImp = (SceLibraryStubTable*)(pMod->stub_top+i);
 
-			cur_nid = (u32*)pImp->fnids;
-			cur_call = (u32*)pImp->funcs;
+			cur_nid = (u32*)pImp->nidtable;
+			cur_call = (u32*)pImp->stubtable;
 			library_flag = pImp->attribute << 16 | pImp->version;
 
-			for(j=0; j<pImp->funcCount; j++) {
+			for(j=0; j<pImp->stubcount; j++) {
 				is_weak = ((pImp->attribute & 0x0009) == 0x0009) ? 1 : 0;
 
 				if (!is_weak && *cur_call == 0x0000054C) {
 					// syscall 0x15
 					printk("WARNING: %s[0x%08X] %s_%08X at 0x%08X unresolved\n",
-							pMod->modname, (uint)library_flag, pImp->name, (uint)*cur_nid, (uint)cur_call);
+							pMod->modname, (uint)library_flag, pImp->libname, (uint)*cur_nid, (uint)cur_call);
 				}
 
 				cur_nid ++;

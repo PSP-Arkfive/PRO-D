@@ -43,9 +43,9 @@
 #include "printk.h"
 #include "systemctrl.h"
 
-PspModuleImport *find_import_lib(SceModule *pMod, char *library)
+SceLibraryStubTable *find_import_lib(SceModule *pMod, char *library)
 {
-	PspModuleImport *pImp;
+	SceLibraryStubTable *pImp;
 	void *stubTab;
 	int stubLen;
 	int i = 0;
@@ -56,10 +56,10 @@ PspModuleImport *find_import_lib(SceModule *pMod, char *library)
 	stubTab = pMod->stub_top;
 	stubLen = pMod->stub_size;
 	while(i<stubLen) {
-		pImp = (PspModuleImport*)(stubTab+i);
-		if((pImp->name) && (strcmp(pImp->name, library) == 0))
+		pImp = (SceLibraryStubTable*)(stubTab+i);
+		if((pImp->libname) && (strcmp(pImp->libname, library) == 0))
 			return pImp;
-		i += (pImp->entLen * 4);
+		i += (pImp->len * 4);
 	}
 
 	return NULL;
@@ -68,14 +68,14 @@ PspModuleImport *find_import_lib(SceModule *pMod, char *library)
 
 unsigned int find_import_bynid(SceModule *pMod, char *library, unsigned int nid)
 {
-	PspModuleImport *pImp;
+	SceLibraryStubTable *pImp;
 	int i;
 
 	pImp = find_import_lib(pMod, library);
 	if(pImp) {
-		for(i=0; i<pImp->funcCount; i++) {
-			if(pImp->fnids[i] == nid)
-				return (unsigned int) &pImp->funcs[i*2];
+		for(i=0; i<pImp->stubcount; i++) {
+			if(pImp->nidtable[i] == nid)
+				return (unsigned int) &pImp->stubtable[i*2];
 		}
 	}
 
@@ -87,7 +87,7 @@ unsigned int find_import_bynid(SceModule *pMod, char *library, unsigned int nid)
  */
 int hook_import_bynid(SceModule *pMod, char *library, unsigned int nid, void *func, int syscall)
 {
-	PspModuleImport *pImp;
+	SceLibraryStubTable *pImp;
 	void *stubTab;
 	int stubLen;
 	int i = 0;
@@ -99,14 +99,14 @@ int hook_import_bynid(SceModule *pMod, char *library, unsigned int nid, void *fu
 	stubLen = pMod->stub_size;
 
 	while(i<stubLen) {
-		pImp = (PspModuleImport*)(stubTab+i);
+		pImp = (SceLibraryStubTable*)(stubTab+i);
 
-		if((pImp->name) && (strcmp(pImp->name, library) == 0)) {
+		if((pImp->libname) && (strcmp(pImp->libname, library) == 0)) {
 			int j;
 
-			for(j=0; j<pImp->funcCount; j++) {
-				if(pImp->fnids[j] == nid) {
-					void *addr = (void*)(&pImp->funcs[j*2]);
+			for(j=0; j<pImp->stubcount; j++) {
+				if(pImp->nidtable[j] == nid) {
+					void *addr = (void*)(&pImp->stubtable[j*2]);
 
 					if(func == NULL) {
 						_sw(0x03E00008, (u32)addr);
@@ -137,7 +137,7 @@ int hook_import_bynid(SceModule *pMod, char *library, unsigned int nid, void *fu
 			}
 		}
 
-		i += (pImp->entLen * 4);
+		i += (pImp->len * 4);
 	}
 
 	return 0;

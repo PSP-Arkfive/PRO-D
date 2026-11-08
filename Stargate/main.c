@@ -182,7 +182,7 @@ static void patch_sceLoadExec(void)
 static int start_module_handler(int modid, SceSize argsize, void *argp, int *modstatus, SceKernelSMOption *opt)
 {
 	SceModule *mod;
-	PspModuleImport *import;
+	SceLibraryStubTable *import;
 	int patched = 0;
 
 	mod = sceKernelFindModuleByUID(modid);
@@ -194,21 +194,21 @@ static int start_module_handler(int modid, SceSize argsize, void *argp, int *mod
 	import = find_import_lib(mod, "Kernel_LibrarZ");
 
 	if(import != NULL) {
-		strcpy((char*)import->name, "Kernel_Library");
+		strcpy((char*)import->libname, "Kernel_Library");
 		patched = 1;
 	}
 
 	import = find_import_lib(mod, "Kernel_Librar0");
 
 	if(import != NULL) {
-		strcpy((char*)import->name, "Kernel_Library");
+		strcpy((char*)import->libname, "Kernel_Library");
 		patched = 1;
 	}
 
 	import = find_import_lib(mod, "sceUtilitO");
 
 	if(import != NULL) {
-		strcpy((char*)import->name, "sceUtility");
+		strcpy((char*)import->libname, "sceUtility");
 		patched = 1;
 	}
 

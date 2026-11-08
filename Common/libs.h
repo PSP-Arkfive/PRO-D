@@ -18,21 +18,9 @@
 #ifndef LIBS_H
 #define LIBS_H
 
-typedef struct
-{
-	const char *name;
-	unsigned short version;
-	unsigned short attribute;
-	unsigned char entLen;
-	unsigned char varCount;
-	unsigned short funcCount;
-	unsigned int *fnids;
-	unsigned int *funcs;
-	unsigned int *vnids;
-	unsigned int *vars;
-}PspModuleImport;
+#include <pspmoduleexport.h>
 
-PspModuleImport *find_import_lib(SceModule *pMod, char *library);
+SceLibraryStubTable *find_import_lib(SceModule *pMod, char *library);
 
 unsigned int find_import_bynid(SceModule *pMod, char *library, unsigned int nid);
 
