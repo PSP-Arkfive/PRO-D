@@ -38,8 +38,6 @@ PSP_MODULE_INFO("PROGalaxyController", 0x1006, 1, 1);
 
 extern int get_total_block(void);
 extern int clear_cache(void);
-extern int sceKernelSetQTGP3(void *unk0);
-extern int sceKernelApplicationType(void);
 
 u32 psp_fw_version;
 u32 psp_model;

@@ -46,9 +46,9 @@ endif
 
 all:
 # Preparing Distribution Folders
-	@mkdir $(DISTRIBUTE) || true
-	@mkdir $(DISTRIBUTE)/flash0/ || true
-	@mkdir $(DISTRIBUTE)/seplugins/ || true
+	@mkdir -p $(DISTRIBUTE)/flash0/kd || true
+	@mkdir -p $(DISTRIBUTE)/flash0/vsh/module || true
+	@mkdir -p $(DISTRIBUTE)/seplugins/ || true
 	@cp -r contrib/fonts $(DISTRIBUTE)/seplugins/fonts || true
 	@cp Translated/* $(DISTRIBUTE)/seplugins || true
 	@rm -f ./Common/*.o
@@ -71,14 +71,14 @@ all:
 	@cd $(SATELITE); make $(OPT_FLAGS) $(DEBUG_OPTION)
 
 # Copy binaries
-	@cp $(RECOVERY)/recovery.prx dist/flash0/_recovery.prx
-	@cp $(VSHCONTROL)/vshctrl.prx dist/flash0/_vshctrl.prx
-	@cp $(SYSTEMCONTROL)/systemctrl.prx dist/flash0/_systemctrl.prx
-	@cp $(GALAXYDRIVER)/galaxy.prx dist/flash0/_galaxy.prx
-	@cp $(INFERNO)/inferno.prx dist/flash0/_inferno.prx
-	@cp $(STARGATE)/stargate.prx dist/flash0/_stargate.prx
-	@cp $(POPCORN)/popcorn.prx dist/flash0/_popcorn.prx
-	@cp $(SATELITE)/satelite.prx dist/flash0/_satelite.prx
+	@cp $(RECOVERY)/recovery.prx dist/flash0/vsh/module/_recovery.prx
+	@cp $(VSHCONTROL)/vshctrl.prx dist/flash0/kd/_vshctrl.prx
+	@cp $(SYSTEMCONTROL)/systemctrl.prx dist/flash0/kd/_systemctrl.prx
+	@cp $(GALAXYDRIVER)/galaxy.prx dist/flash0/kd/_galaxy.prx
+	@cp $(INFERNO)/inferno.prx dist/flash0/kd/_inferno.prx
+	@cp $(STARGATE)/stargate.prx dist/flash0/kd/_stargate.prx
+	@cp $(POPCORN)/popcorn.prx dist/flash0/kd/_popcorn.prx
+	@cp $(SATELITE)/satelite.prx dist/flash0/vsh/module/_satelite.prx
 
 clean:
 	@rm -rf $(DISTRIBUTE)
