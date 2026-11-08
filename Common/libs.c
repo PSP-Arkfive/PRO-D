@@ -75,7 +75,7 @@ unsigned int find_import_bynid(SceModule *pMod, char *library, unsigned int nid)
 	if(pImp) {
 		for(i=0; i<pImp->stubcount; i++) {
 			if(pImp->nidtable[i] == nid)
-				return (unsigned int) &pImp->stubtable[i*2];
+				return (unsigned int) pImp->stubtable + 8 * i;
 		}
 	}
 
@@ -87,57 +87,38 @@ unsigned int find_import_bynid(SceModule *pMod, char *library, unsigned int nid)
  */
 int hook_import_bynid(SceModule *pMod, char *library, unsigned int nid, void *func, int syscall)
 {
-	SceLibraryStubTable *pImp;
-	void *stubTab;
-	int stubLen;
-	int i = 0;
 
 	if(pMod == NULL)
 		return -1;
 
-	stubTab = pMod->stub_top;
-	stubLen = pMod->stub_size;
+	void *addr = (void*)find_import_bynid(pMod, library, nid);
 
-	while(i<stubLen) {
-		pImp = (SceLibraryStubTable*)(stubTab+i);
+	if (addr) {
+		if(func == NULL) {
+			_sw(0x03E00008, (u32)addr);
+			_sw(NOP, (u32)(addr + 4));
+		} else {
+			if(syscall) {
+				u32 syscall_num;
 
-		if((pImp->libname) && (strcmp(pImp->libname, library) == 0)) {
-			int j;
+				syscall_num = sctrlKernelQuerySystemCall(func);
 
-			for(j=0; j<pImp->stubcount; j++) {
-				if(pImp->nidtable[j] == nid) {
-					void *addr = (void*)(&pImp->stubtable[j*2]);
+				if(syscall_num == (u32)-1) {
+					printk("%s: cannot find syscall in %s_%08X\n", __func__, library, nid);
 
-					if(func == NULL) {
-						_sw(0x03E00008, (u32)addr);
-						_sw(NOP, (u32)(addr + 4));
-					} else {
-						if(syscall) {
-							u32 syscall_num;
-
-							syscall_num = sctrlKernelQuerySystemCall(func);
-
-							if(syscall_num == (u32)-1) {
-								printk("%s: cannot find syscall in %s_%08X\n", __func__, library, nid);
-
-								return -1;
-							}
-
-							_sw(0x03E00008, (u32)addr);
-							_sw(MAKE_SYSCALL(syscall_num), (u32)(addr + 4));
-						} else {
-							_sw(MAKE_JUMP(func), (u32)addr);
-							_sw(NOP, (u32)(addr + 4));
-						}
-					}
-
-					sceKernelDcacheWritebackInvalidateRange(addr, 8);
-					sceKernelIcacheInvalidateRange(addr, 8);
+					return -1;
 				}
+
+				_sw(0x03E00008, (u32)addr);
+				_sw(MAKE_SYSCALL(syscall_num), (u32)(addr + 4));
+			} else {
+				_sw(MAKE_JUMP(func), (u32)addr);
+				_sw(NOP, (u32)(addr + 4));
 			}
 		}
 
-		i += (pImp->len * 4);
+		sceKernelDcacheWritebackInvalidateRange(addr, 8);
+		sceKernelIcacheInvalidateRange(addr, 8);
 	}
 
 	return 0;

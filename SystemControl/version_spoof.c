@@ -27,7 +27,6 @@
 #include "printk.h"
 #include "libs.h"
 #include "utils.h"
-#include "rebootex_conf.h"
 
 int sceResmgr_driver_9DC14891(u8 *buf, u32 size, u32* newsize);
 

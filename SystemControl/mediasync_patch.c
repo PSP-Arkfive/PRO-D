@@ -26,7 +26,6 @@
 #include "printk.h"
 #include "utils.h"
 #include "strsafe.h"
-#include "rebootex_conf.h"
 #include "main.h"
 #include "systemctrl_patch_offset.h"
 
@@ -127,7 +126,7 @@ void patch_sceMediaSync(u32 scemediasync_text_addr)
 
 	sceSystemFileGetIndex = (void*)(scemediasync_text_addr + g_offs->mediasync_patch.sceSystemFileGetIndex);
 
-	if (rebootex_conf.iso_mode != NORMAL_MODE) {
+	if (rebootex_conf.iso_mode != MODE_UMD) {
 		// patch MsCheckMedia
 		// MsCheckMedia: mediasync used it to check EBOOT.PBP
 		// Let it return 1 always

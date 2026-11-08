@@ -25,10 +25,8 @@
 #include <string.h>
 #include "main.h"
 #include "utils.h"
-#include "systemctrl.h"
 #include "printk.h"
 #include "systemctrl_patch_offset.h"
-#include "rebootex_conf.h"
 
 PSP_MODULE_INFO("SystemControl", 0x3007, 1, 0);
 

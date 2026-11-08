@@ -19,12 +19,15 @@
 #define MAIN_H
 
 #include <pspsysmem_kernel.h>
-#include "systemctrl.h"
-#include "systemctrl_se.h"
-#include "systemctrl_pro.h"
+#include <systemctrl.h>
+#include <systemctrl_se.h>
+#include <systemctrl_pro.h>
+#include <psprebootex.h>
+#include <rebootexconfig.h>
 
 extern u32 psp_model;
 extern u32 psp_fw_version;
+extern RebootexConfigPRO rebootex_conf;
 
 int PatchExec1(unsigned char * buffer, int * check);
 int PatchExec2(unsigned char * buffer, int * check);

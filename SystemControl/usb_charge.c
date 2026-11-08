@@ -27,7 +27,6 @@
 #include "utils.h"
 #include "systemctrl.h"
 #include "printk.h"
-#include "rebootex_conf.h"
 #include "libs.h"
 #include "systemctrl_patch_offset.h"
 

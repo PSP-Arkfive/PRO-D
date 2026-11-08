@@ -23,18 +23,18 @@
 #include <pspiofilemgr.h>
 #include <stdio.h>
 #include <string.h>
+#include <systemctrl.h>
+#include <systemctrl_se.h>
+#include <rebootexconfig.h>
 #include "main.h"
 #include "utils.h"
-#include "systemctrl.h"
-#include "systemctrl_se.h"
 #include "printk.h"
 #include "../Rebootex_bin/rebootex.h"
-#include "rebootex_conf.h"
 #include "strsafe.h"
 #include "systemctrl_patch_offset.h"
 
 static int (*LoadReboot)(void * arg1, unsigned int arg2, void * arg3, unsigned int arg4) = NULL;
-rebootex_config rebootex_conf;
+RebootexConfigPRO rebootex_conf;
 u8* custom_rebootex = NULL;
 u32 size_custom_rebootex = REBOOTEX_MAX_SIZE;
 
@@ -43,13 +43,13 @@ static int load_reboot(void * arg1, unsigned int arg2, void * arg3, unsigned int
 {
 	if (custom_rebootex) {
 		if (custom_rebootex[0] == 0x1F && custom_rebootex[1] == 0x8B) // gzip packed rebootex
-			sceKernelGzipDecompress((unsigned char *)REBOOTEX_START, REBOOTEX_MAX_SIZE, custom_rebootex, NULL);
+			sceKernelGzipDecompress((unsigned char *)REBOOTEX_TEXT, REBOOTEX_MAX_SIZE, custom_rebootex, NULL);
 		else // plain payload
-			memcpy((void *)REBOOTEX_START, custom_rebootex, size_custom_rebootex);
+			memcpy((void *)REBOOTEX_TEXT, custom_rebootex, size_custom_rebootex);
 	}
 	else {
 		//copy reboot extender
-		memcpy((void*)REBOOTEX_START, rebootex, size_rebootex);
+		memcpy((void*)REBOOTEX_TEXT, rebootex, size_rebootex);
 	}
 	
 	//reset reboot flags

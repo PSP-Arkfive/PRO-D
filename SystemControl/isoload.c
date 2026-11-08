@@ -28,7 +28,6 @@
 #include "systemctrl.h"
 #include "printk.h"
 #include "strsafe.h"
-#include "rebootex_conf.h"
 
 static char g_iso_filename[256];
 

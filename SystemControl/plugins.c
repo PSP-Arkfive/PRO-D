@@ -24,7 +24,6 @@
 #include "utils.h"
 #include "printk.h"
 #include "strsafe.h"
-#include "rebootex_conf.h"
 #include "libertas.h"
 
 #define WAIT_MEMORY_STICK_TIMEOUT ( 2 * 1000000 )

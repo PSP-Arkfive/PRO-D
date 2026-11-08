@@ -33,7 +33,6 @@
 #include "nid_resolver.h"
 #include "strsafe.h"
 #include "systemctrl_patch_offset.h"
-#include "rebootex_conf.h"
 
 extern int *InitForKernel_040C934B(void);
 extern int sceKernelExitVSH(struct SceKernelLoadExecVSHParam *param);

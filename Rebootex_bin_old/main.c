@@ -16,7 +16,6 @@
  */
 
 #include <pspsdk.h>
-#include "rebootex_conf.h"
 #include "utils.h"
 #include "config.h"
 #include "rebootex_bin_patch_offset.h"
