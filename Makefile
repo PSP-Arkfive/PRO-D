@@ -1,3 +1,7 @@
+PY = $(shell which python3)
+PSPDEV = $(shell psp-config --pspdev-path)
+BUILDTOOLS = $(PSPDEV)/share/psp-cfw-sdk/build-tools
+
 REBOOTEXBIN = Rebootex_bin
 VSHCONTROL = Vshctrl
 SYSTEMCONTROL = SystemControl
@@ -14,22 +18,32 @@ OPT_FLAGS=-j4
 
 ifeq ($(CONFIG_635), 1)
 OPT_FLAGS+=CONFIG_635=1
+FLASH_PACKAGE = FLASH635.PRO
+M33_PRX = march33.prx
 endif
 
 ifeq ($(CONFIG_620), 1)
 OPT_FLAGS+=CONFIG_620=1
+FLASH_PACKAGE = FLASH620.PRO
+M33_PRX = march33_620.prx
 endif
 
 ifeq ($(CONFIG_639), 1)
 OPT_FLAGS+=CONFIG_639=1
+FLASH_PACKAGE = FLASH639.PRO
+M33_PRX = march33.prx
 endif
 
 ifeq ($(CONFIG_660), 1)
 OPT_FLAGS+=CONFIG_660=1
+FLASH_PACKAGE = FLASH660.PRO
+M33_PRX = march33_660.prx
 endif
 
 ifeq ($(CONFIG_661), 1)
 OPT_FLAGS+=CONFIG_661=1
+FLASH_PACKAGE = FLASH661.PRO
+M33_PRX = march33_660.prx
 endif
 
 ifeq ($(PSID_CHECK), 1)
@@ -79,6 +93,8 @@ all:
 	@cp $(STARGATE)/stargate.prx dist/flash0/kd/_stargate.prx
 	@cp $(POPCORN)/popcorn.prx dist/flash0/kd/_popcorn.prx
 	@cp $(SATELITE)/satelite.prx dist/flash0/vsh/module/_satelite.prx
+	@cp $(M33DRIVER)/$(M33_PRX) dist/flash0/kd/_march33.prx
+	$(PY) $(BUILDTOOLS)/pack/pack.py -p dist/$(FLASH_PACKAGE) flash0.txt -s
 
 clean:
 	@rm -rf $(DISTRIBUTE)

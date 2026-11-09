@@ -1,0 +1,9 @@
+/kd/_systemctrl.prx,dist/flash0/kd/_systemctrl.prx
+/kd/_vshctrl.prx,dist/flash0/kd/_vshctrl.prx
+/kd/_stargate.prx,dist/flash0/kd/_stargate.prx
+/kd/_popcorn.prx,dist/flash0/kd/_popcorn.prx
+/kd/_inferno.prx,dist/flash0/kd/_inferno.prx
+/kd/_galaxy.prx,dist/flash0/kd/_galaxy.prx
+/kd/_march33.prx,dist/flash0/kd/_march33.prx
+/vsh/module/_recovery.prx,dist/flash0/vsh/module/_recovery.prx
+/vsh/module/_satelite.prx,dist/flash0/vsh/module/_satelite.prx
