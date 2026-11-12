@@ -13,6 +13,7 @@ SATELITE = Satelite
 POPCORN = Popcorn
 RECOVERY = Recovery
 CROSSFW = CrossFW
+INSTALLER = Installer
 DISTRIBUTE = dist
 OPT_FLAGS=-j4
 
@@ -83,6 +84,7 @@ all:
 	@cd $(STARGATE); make $(OPT_FLAGS) $(DEBUG_OPTION) $(RELEASE_OPTION)
 	@cd $(POPCORN); make $(OPT_FLAGS) $(DEBUG_OPTION)
 	@cd $(SATELITE); make $(OPT_FLAGS) $(DEBUG_OPTION)
+	@cd $(INSTALLER); make $(OPT_FLAGS) $(DEBUG_OPTION)
 
 # Copy binaries
 	@cp $(RECOVERY)/recovery.prx dist/flash0/vsh/module/_recovery.prx
@@ -108,6 +110,7 @@ clean:
 	@cd $(SATELITE); make clean $(DEBUG_OPTION)
 	@cd $(POPCORN); make clean $(DEBUG_OPTION)
 	@cd $(RECOVERY); make clean $(DEBUG_OPTION)
+	@cd $(INSTALLER); make clean $(DEBUG_OPTION)
 
 deps:
 	make clean_lib
