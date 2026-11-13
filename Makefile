@@ -15,8 +15,8 @@ RECOVERY = Recovery
 CROSSFW = CrossFW
 INSTALLER = Installer
 DISTRIBUTE = dist
-LIBS_DIR = libs
-LIBS_ARCHIVE = $(LIBS_DIR).zip
+LIBS_DIR = .usbdevice-build
+LIBS_ARCHIVE = $(LIBS_DIR)/LIBS.zip
 LIBS_URL = https://github.com/pspdev/psp-dynamic-libraries/releases/download/latest/LIBS.zip
 OPT_FLAGS=-j4
 
@@ -100,7 +100,9 @@ all: libs_latest
 	@cp $(POPCORN)/popcorn.prx dist/flash0/kd/_popcorn.prx
 	@cp $(SATELITE)/satelite.prx dist/flash0/vsh/module/_satelite.prx
 	@cp $(M33DRIVER)/$(M33_PRX) dist/flash0/kd/_march33.prx
-	@cp $(LIBS_DIR)/usbdevice.prx $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/
+	@rm -f $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/usbdevice.prx
+	cd $(LIBS_DIR) && $(PY) $(BUILDTOOLS)/gz/pspgz.py $(abspath $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/usbdevice.prx) $(BUILDTOOLS)/gz/SystemControl.hdr usbdevice.prx pspUsbDev_Driver 0x1006
+	@test -s $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/usbdevice.prx
 	$(PY) $(BUILDTOOLS)/pack/pack.py -p dist/$(FLASH_PACKAGE) flash0.txt -s
 	@cp $(INSTALLER)/EBOOT.PBP $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/ || true
 	@cp dist/$(FLASH_PACKAGE) $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/ || true
@@ -108,12 +110,11 @@ all: libs_latest
 libs_latest:
 	mkdir -p $(LIBS_DIR)
 	curl --fail --location --silent --show-error "$(LIBS_URL)" -o "$(LIBS_ARCHIVE)"
-	unzip -o "$(LIBS_ARCHIVE)" -d "$(LIBS_DIR)"
+	unzip -o "$(LIBS_ARCHIVE)" usbdevice.prx -d "$(LIBS_DIR)"
 
 clean:
 	@rm -rf $(DISTRIBUTE)
 	@rm -rf $(LIBS_DIR)
-	@rm -f $(LIBS_ARCHIVE)
 	@cd $(REBOOTEXBIN); make clean $(DEBUG_OPTION)
 	@cd $(CROSSFW); make clean $(DEBUG_OPTION)
 	@cd $(VSHCONTROL); make clean $(DEBUG_OPTION)
@@ -135,3 +136,5 @@ build_lib:
 	
 clean_lib:
 	@cd $(SYSTEMCONTROL)/libs; make clean $(DEBUG_OPTION)
+
+.PHONY: libs_latest

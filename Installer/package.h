@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define PRO_FILE_COUNT 10
+#define PRO_FILE_COUNT 9
 #define PRO_PATH_SIZE 64
 
 typedef struct {

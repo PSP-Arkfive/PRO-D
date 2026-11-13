@@ -11,17 +11,22 @@ installer. If a write fails, flash0 may be partially updated; the installer
 reports the error rather than claiming success. Existing files are overwritten
 and are not backed up by the installer.
 
-Place `EBOOT.PBP` and the package matching the installed firmware together in
+Place `EBOOT.PBP`, `usbdevice.prx`, and the package matching the installed firmware together in
 `PSP/GAME/PROINSTALLER/` on the storage device. The package names are
-`FLASH620.PRO`, `FLASH639.PRO`, and `FLASH660.PRO`.
+`FLASH620.PRO`, `FLASH639.PRO`, `FLASH660.PRO`, and `FLASH661.PRO`.
 6.60 and 6.61 use different firmware-specific builds; they are not
 interchangeable. Only packages actually built and distributed are available.
 The installer rejects unsupported firmware/model combinations and incomplete
 or malformed packages before opening flash0 for writing. The archive format
 does not authenticate its contents: only use packages from a trusted source.
 
-From the project root, `make dist TARGET_FW=660` builds the 6.60 package and
-installer under `dist/PSP/GAME/PROINSTALLER/`. The build also accepts 620 and 639. 
-Clean the project before switching `TARGET_FW`, because the existing component 
-makefiles reuse object files across firmware builds. Install the PSP toolchain 
+The installer copies the compressed USB module to `flash0:/kd/_usbdevice.prx`.
+The build downloads the universal module from psp-dynamic-libraries and
+compresses it using psp-cfw-sdk.
+
+From the project root, `make CONFIG_660=1` builds the 6.60 package and
+installer under `dist/PSP/GAME/PROINSTALLER/`. Use `CONFIG_620=1`,
+`CONFIG_639=1`, or `CONFIG_661=1` for the other supported versions.
+Clean the project before switching firmware, because the existing component
+makefiles reuse object files across firmware builds. Install the PSP toolchain
 and psp-cfw-sdk (including LibPspExploit) first.

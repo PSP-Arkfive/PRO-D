@@ -20,6 +20,45 @@ static int seek_file(int fd, int offset, int whence)
     return k.KernelIOLSeek(fd, offset, whence);
 }
 
+static unsigned read_le32(const unsigned char *p)
+{
+    return (unsigned)p[0] | ((unsigned)p[1] << 8) |
+           ((unsigned)p[2] << 16) | ((unsigned)p[3] << 24);
+}
+
+static int prepare_usb_file(int fd, ProFile *file)
+{
+    int size = k.KernelIOLSeek(fd, 0, PSP_SEEK_END);
+    unsigned read_size = 0;
+    if (size < 0x160 || size > 8 * 1024 * 1024 ||
+        k.KernelIOLSeek(fd, 0, PSP_SEEK_SET) != 0)
+        return -1;
+    while (read_size < 0x152) {
+        int n = k.KernelIORead(fd, buffer + read_size, 0x152 - read_size);
+        if (n <= 0 || (unsigned)n > 0x152 - read_size)
+            return -1;
+        read_size += n;
+    }
+    if (memcmp(buffer, "~PSP", 4) ||
+        read_le32(buffer + 0x2c) != (unsigned)size ||
+        read_le32(buffer + 0xb0) != (unsigned)size - 0x150 ||
+        read_le32(buffer + 0x130) != 0xc01db15d ||
+        buffer[0x150] != 0x1f || buffer[0x151] != 0x8b)
+        return -1;
+    while (read_size < (unsigned)size) {
+        unsigned chunk = (unsigned)size - read_size;
+        if (chunk > sizeof(buffer))
+            chunk = sizeof(buffer);
+        int n = k.KernelIORead(fd, buffer, chunk);
+        if (n <= 0 || (unsigned)n > chunk)
+            return -1;
+        read_size += n;
+    }
+    file->size = (unsigned)size;
+    file->offset = 0;
+    return 0;
+}
+
 static int copy_file(int archive, const ProFile *file)
 {
     char path[80];
@@ -127,7 +166,10 @@ static int install_thread(SceSize args, void *argp)
 {
     int (*get_model)(void);
     unsigned nid;
-    int model, archive, result, mounted = 0;
+    int model, archive, usb = -1, result, mounted = 0;
+    char usb_path[sizeof(package_path)];
+    char *slash;
+    ProFile usb_file = { "/kd/_usbdevice.prx", 0, 0 };
     ProReader reader = { k.KernelIORead, seek_file };
     (void)args;
     (void)argp;
@@ -153,6 +195,18 @@ static int install_thread(SceSize args, void *argp)
         snprintf(install_message, sizeof(install_message), "Invalid, incomplete, or truncated firmware package.");
         goto close_archive;
     }
+    strcpy(usb_path, package_path);
+    slash = strrchr(usb_path, '/');
+    if (!slash || (size_t)(slash + 1 - usb_path) + sizeof("usbdevice.prx") > sizeof(usb_path)) {
+        snprintf(install_message, sizeof(install_message), "USB module path is invalid or too long.");
+        goto close_archive;
+    }
+    strcpy(slash + 1, "usbdevice.prx");
+    usb = k.KernelIOOpen(usb_path, PSP_O_RDONLY, 0);
+    if (usb < 0 || prepare_usb_file(usb, &usb_file) < 0) {
+        snprintf(install_message, sizeof(install_message), "Missing or invalid compressed usbdevice.prx.");
+        goto close_archive;
+    }
     result = k.IoUnassign("flash0:");
     if (result < 0) {
         snprintf(install_message, sizeof(install_message), "Cannot unassign flash0: 0x%08X", result);
@@ -164,6 +218,11 @@ static int install_thread(SceSize args, void *argp)
         goto restore_mount;
     }
     mounted = 1;
+    result = copy_file(usb, &usb_file);
+    if (result < 0) {
+        snprintf(install_message, sizeof(install_message), "Write/verification failed: %.63s (0x%08X)", usb_file.name, result);
+        goto restore_mount;
+    }
     for (unsigned i = 0; i < PRO_FILE_COUNT; ++i) {
         unsigned index = (i + 1) % PRO_FILE_COUNT;
         result = copy_file(archive, &files[index]);
@@ -187,6 +246,10 @@ restore_mount:
         snprintf(install_message, sizeof(install_message), "Cannot restore read-only flash0: 0x%08X", result);
     }
 close_archive:
+    if (usb >= 0 && k.KernelIOClose(usb) < 0) {
+        install_result = -1;
+        snprintf(install_message, sizeof(install_message), "Cannot close USB module.");
+    }
     if (k.KernelIOClose(archive) < 0) {
         install_result = -1;
         snprintf(install_message, sizeof(install_message), "Cannot close firmware package.");
