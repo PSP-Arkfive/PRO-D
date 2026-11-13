@@ -64,6 +64,7 @@ all:
 	@mkdir -p $(DISTRIBUTE)/flash0/kd || true
 	@mkdir -p $(DISTRIBUTE)/flash0/vsh/module || true
 	@mkdir -p $(DISTRIBUTE)/seplugins/ || true
+	@mkdir -p $(DISTRIBUTE)/PSP/GAME/PROINSTALLER || true
 	@cp -r contrib/fonts $(DISTRIBUTE)/seplugins/fonts || true
 	@cp Translated/* $(DISTRIBUTE)/seplugins || true
 	@rm -f ./Common/*.o
@@ -97,6 +98,8 @@ all:
 	@cp $(SATELITE)/satelite.prx dist/flash0/vsh/module/_satelite.prx
 	@cp $(M33DRIVER)/$(M33_PRX) dist/flash0/kd/_march33.prx
 	$(PY) $(BUILDTOOLS)/pack/pack.py -p dist/$(FLASH_PACKAGE) flash0.txt -s
+	@cp $(INSTALLER)/EBOOT.PBP $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/ || true
+	@cp dist/$(FLASH_PACKAGE) $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/ || true
 
 clean:
 	@rm -rf $(DISTRIBUTE)
