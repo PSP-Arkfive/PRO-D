@@ -52,7 +52,7 @@ jobs:
 
       - name: Build
         run: |
-          make
+          make CONFIG_661=1
 
       - name: Compress
         run: |
