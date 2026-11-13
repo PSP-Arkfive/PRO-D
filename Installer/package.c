@@ -42,6 +42,7 @@ int pro_select_files(uint32_t firmware, int model, ProFile files[PRO_FILE_COUNT]
     strcpy(files[0].name, "/kd/_march33.prx");
     for (unsigned i = 0; i < sizeof(common) / sizeof(common[0]); ++i)
         strcpy(files[i + 1].name, common[i]);
+    strcpy(files[9].name, "/kd/_usbdevice.prx");
     return 0;
 }
 

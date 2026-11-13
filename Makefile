@@ -15,6 +15,9 @@ RECOVERY = Recovery
 CROSSFW = CrossFW
 INSTALLER = Installer
 DISTRIBUTE = dist
+LIBS_DIR = libs
+LIBS_ARCHIVE = $(LIBS_DIR).zip
+LIBS_URL = https://github.com/pspdev/psp-dynamic-libraries/releases/download/latest/LIBS.zip
 OPT_FLAGS=-j4
 
 ifeq ($(CONFIG_635), 1)
@@ -59,7 +62,7 @@ ifeq ($(NIGHTLY), 1)
 NIGHTLY_OPTION=NIGHTLY=1
 endif
 
-all:
+all: libs_latest
 # Preparing Distribution Folders
 	@mkdir -p $(DISTRIBUTE)/flash0/kd || true
 	@mkdir -p $(DISTRIBUTE)/flash0/vsh/module || true
@@ -97,12 +100,20 @@ all:
 	@cp $(POPCORN)/popcorn.prx dist/flash0/kd/_popcorn.prx
 	@cp $(SATELITE)/satelite.prx dist/flash0/vsh/module/_satelite.prx
 	@cp $(M33DRIVER)/$(M33_PRX) dist/flash0/kd/_march33.prx
+	@cp $(LIBS_DIR)/usbdevice.prx $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/
 	$(PY) $(BUILDTOOLS)/pack/pack.py -p dist/$(FLASH_PACKAGE) flash0.txt -s
 	@cp $(INSTALLER)/EBOOT.PBP $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/ || true
 	@cp dist/$(FLASH_PACKAGE) $(DISTRIBUTE)/PSP/GAME/PROINSTALLER/ || true
 
+libs_latest:
+	mkdir -p $(LIBS_DIR)
+	curl --fail --location --silent --show-error "$(LIBS_URL)" -o "$(LIBS_ARCHIVE)"
+	unzip -o "$(LIBS_ARCHIVE)" -d "$(LIBS_DIR)"
+
 clean:
 	@rm -rf $(DISTRIBUTE)
+	@rm -rf $(LIBS_DIR)
+	@rm -f $(LIBS_ARCHIVE)
 	@cd $(REBOOTEXBIN); make clean $(DEBUG_OPTION)
 	@cd $(CROSSFW); make clean $(DEBUG_OPTION)
 	@cd $(VSHCONTROL); make clean $(DEBUG_OPTION)
