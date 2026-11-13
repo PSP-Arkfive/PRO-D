@@ -1,0 +1,84 @@
+name: PRO-D
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '**/README.md'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: pspdev/pspdev
+    steps:
+      - name: Dependencies
+        run: |
+          apk add clang build-base automake autoconf zlib-dev python3 zip curl unzip sudo gcc g++
+
+      - name: Cloning and Building lastest pspsdk
+        run: |
+          git clone https://github.com/pspdev/pspsdk
+
+      - name: Bootstrap sdk and build
+        working-directory: pspsdk
+        run: |
+          ./build-and-install.sh
+        env:
+          PSPDEV: /usr/local/pspdev
+          PATH: /usr/local/pspdev/bin:/usr/local/bin:/usr/bin:/bin
+
+      - name: Clone psp-cfw-sdk custom branch
+        run: |
+          git clone -b bootloadex_tmhlpr --single-branch https://github.com/pspdev/psp-cfw-sdk.git
+
+      - name: Build psp-cfw-sdk
+        working-directory: psp-cfw-sdk
+        run: |
+          make
+          make install
+        env:
+          PSPDEV: /usr/local/pspdev
+          PATH: /usr/local/pspdev/bin:/usr/local/bin:/usr/bin:/bin
+
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: |
+          make
+
+      - name: Compress
+        run: |
+          cd dist
+          zip -r ../PRO-D.zip .
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: pro-d-release
+          path: PRO-D.zip
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: pro-d-release
+          path: .
+      - name:
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: latest
+          name: PRO-D Release
+          files: PRO-D.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
