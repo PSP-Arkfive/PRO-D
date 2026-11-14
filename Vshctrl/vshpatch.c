@@ -439,7 +439,7 @@ int umdLoadExec(char * file, struct SceKernelLoadExecVSHParam * param)
 
 	sctrlSEGetConfig((SEConfig*)&config);
 
-	if(sctrlSEGetBootConfFileIndex() == MODE_VSHUMD) {
+	if(sctrlSEGetBootConfFileIndex() == BOOT_MODE_VSHUMD) {
 		sctrlSESetBootConfFileIndex(config.umdmode);
 		sctrlSESetDiscType(PSP_UMD_TYPE_GAME);
 	}
@@ -480,8 +480,8 @@ int umdLoadExecUpdater(char * file, struct SceKernelLoadExecVSHParam * param)
 
 	sctrlSEGetConfig(&config);
 
-	if(sctrlSEGetBootConfFileIndex() == MODE_VSHUMD) {
-		sctrlSESetBootConfFileIndex(MODE_UPDATERUMD);
+	if(sctrlSEGetBootConfFileIndex() == BOOT_MODE_VSHUMD) {
+		sctrlSESetBootConfFileIndex(BOOT_MODE_UPDATERUMD);
 		sctrlSESetDiscType(PSP_UMD_TYPE_GAME);
 	}
 
@@ -526,7 +526,7 @@ static void patch_vsh_module(SceModule * mod)
 		_sw(MAKE_SYSCALL(sctrlKernelQuerySystemCall(fakeParamInexistance)), mod->text_addr + g_offs->vsh_module_patch.PBPFWCheck[i]);
 	}
 
-	if(psp_model == PSP_GO && sctrlSEGetBootConfFileIndex() == MODE_VSHUMD) {
+	if(psp_model == PSP_GO && sctrlSEGetBootConfFileIndex() == BOOT_MODE_VSHUMD) {
 		patch_vsh_module_for_pspgo_umdvideo(mod);
 	}
 }

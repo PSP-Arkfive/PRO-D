@@ -197,8 +197,6 @@ u32 sctrlHENFindFunction(const char* szMod, const char* szLib, u32 nid)
 	return 0;
 }
 
-u32 FindProc(char* szMod, char* szLib, u32 nid) __attribute__((alias("sctrlHENFindFunction")));
-
 STMOD_HANDLER sctrlHENSetStartModuleHandler(STMOD_HANDLER new_handler)
 {
 	STMOD_HANDLER on_module_start;

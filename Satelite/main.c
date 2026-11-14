@@ -246,7 +246,7 @@ static void launch_umdvideo_mount(void)
 	int type;
 
 	if(0 == umdvideo_idx) {
-		if(sctrlSEGetBootConfFileIndex() == MODE_VSHUMD) {
+		if(sctrlSEGetBootConfFileIndex() == BOOT_MODE_VSHUMD) {
 			// cancel mount
 			sctrlSESetUmdFile("");
 			sctrlSESetBootConfFileIndex(MODE_UMD);
@@ -274,7 +274,7 @@ static void launch_umdvideo_mount(void)
 	}
 
 	sctrlSESetUmdFile(path);
-	sctrlSESetBootConfFileIndex(MODE_VSHUMD);
+	sctrlSESetBootConfFileIndex(BOOT_MODE_VSHUMD);
 	sctrlSESetDiscType(type);
 	sctrlKernelExitVSH(NULL);
 }
