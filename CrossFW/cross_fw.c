@@ -940,12 +940,12 @@ int sctrlKernelCheckExecFile(unsigned char * buffer, int * check)
 #endif
 #ifdef CONFIG_639
 		case FW_639:
-			ret = sceKernelCheckExecFile(buffer, check);
+			ret = sceKernelCheckExecFile(buffer, (SceLoadCoreExecFileInfo *)check);
 			break;
 #endif
 #ifdef CONFIG_635
 		case FW_635:
-			ret = sceKernelCheckExecFile(buffer, check);
+			ret = sceKernelCheckExecFile(buffer, (SceLoadCoreExecFileInfo *)check);
 			break;
 #endif
 #ifdef CONFIG_620

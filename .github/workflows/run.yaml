@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Dependencies
         run: |
-          apk add clang build-base automake autoconf zlib-dev python3 zip curl unzip sudo gcc g++
+          apk add bash clang build-base automake autoconf zlib-dev python3 zip curl unzip sudo gcc g++
 
       - name: Cloning and Building lastest pspsdk
         run: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: Build
         run: |
-          make CONFIG_661=1
+          ./build.sh
 
       - name: Compress
         run: |

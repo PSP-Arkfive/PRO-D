@@ -30,3 +30,9 @@ installer under `dist/PSP/GAME/PROINSTALLER/`. Use `CONFIG_620=1`,
 Clean the project before switching firmware, because the existing component
 makefiles reuse object files across firmware builds. Install the PSP toolchain
 and psp-cfw-sdk (including LibPspExploit) first.
+
+Alternatively, run `./build.sh` from the project root to build the 6.20,
+6.39 and 6.61 packages in an isolated temporary copy. It writes the packages to
+`dist/` and places them with the installer and USB module in
+`dist/PSP/GAME/PROINSTALLER/`. The build downloads the USB module once and
+does not remove existing distribution files.
